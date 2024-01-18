@@ -1,0 +1,11 @@
+-- Experiment B3 -- (start with multimodal condition)
+-n 0 -d 0.0 -es B -eseq S0 -esuf M -sn 
+-n 6 -d 0.075 -es B -eseq S3 -esuf 1M -sn
+-n 3 -d 0.075 -es B -eseq S3 -esuf 2M -sn
+-n 6 -d 0.25 -es B -eseq S3 -esuf 3M -sn
+-n 3 -d 0.25 -es B -eseq S3 -esuf 4M -sn
+-n 0 -d 0.0 -es B -eseq S0 -esuf H -sn
+-n 6 -d 0.075 -es B -eseq S3 -esuf 1H -sn
+-n 3 -d 0.075 -es B -eseq S3 -esuf 2H -sn
+-n 6 -d 0.25 -es B -eseq S3 -esuf 3H -sn
+-n 3 -d 0.25 -es B -eseq S3 -esuf 4H -sn

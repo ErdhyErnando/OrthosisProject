@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>lib.orthosis_lib API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>lib.orthosis_lib</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python3
+
+## This library contains all the methods being used for the orthosis force control thread ##
+
+import random
+import time
+import zmq
+# Appending the relative path of the root folder
+import sys, os
+# sys.path.append(&#39;../&#39;)
+from os.path import dirname, join, abspath
+sys.path.insert(0, abspath(join(dirname(__file__), &#39;..&#39;)))
+import param.orthosis_param as param
+import param.pseudo_viz_param as param_viz
+import param.error_param as param_err
+# Importing multipledispatch for function overloading
+from multipledispatch import dispatch
+
+
+def calibrate(orthosis_handle):
+    &#34;&#34;&#34;
+    This function calibrates the force offset for the user
+
+    Returns(pseudo):
+        param.f_offset : average offset in force
+        param.is_calibrated   : flag to indicate that the hand is calibrated
+    &#34;&#34;&#34;
+    n=10
+    m=0
+    for i in range(n):
+        if readValues(orthosis_handle):
+            m+=1
+            param.orthosis_f_offset += param.orthosis_force
+    param.orthosis_f_offset /= float(m)
+    param.is_calibrated = True
+
+
+def forceControl(orthosis_handle):
+    &#34;&#34;&#34;
+    This function performs the main functions of the experiment
+            - detect the sensitivity of the force to start the motion
+            - introduce errors
+            - provide direciton commands for motion
+    &#34;&#34;&#34;
+    if param.intro_errors:
+        introduceRandomErrors()
+        print(&#34;Oops! This experiment will have random errors&#34;)
+    else:
+        print(&#34;Enjoy error-free operation&#34;)
+
+    # Check if the hand is moving up
+    if param.orthosis_force &lt; -param.f_sensitivity:
+        if not param.is_disturbing:
+            executeFlexion(orthosis_handle)
+        else:
+            executeExtension(orthosis_handle)
+            print (&#34;Error Introduced&#34;)
+    # Check if the hand is moving down 
+    elif param.orthosis_force &gt; param.f_sensitivity:
+        if not param.is_disturbing:
+            executeExtension(orthosis_handle)
+        else:
+            executeFlexion(orthosis_handle)
+            print (&#34;Error Introduced&#34;)
+    # Default condition
+    else:
+        stopMotion(orthosis_handle)
+
+    # If the hard limit is reached
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)
+
+
+def runExperiment(orthosis_handle):
+    &#34;&#34;&#34;
+    This function is the main function for the basic orthosis experiment.
+    Conditions:
+        - The force values will only be checked at the beginning of each trial
+        - Once, the force feedback &gt; f_sensitivity, the flexion or extension motions will be executed effortlessly
+
+    Args:
+        param.is_flexion_done (bool)                : bool to check if flexion has been fully executed
+        param.is_flexion_started (bool)             : bool to check if flexion has started. If False - means that extension has started
+        param.is_enough_force_for_flexion (bool)    : bool to check the force condition. If False - means that there is enough force for extension
+
+    Returns:
+        param.trial_count (int)                     : total number of trials executed
+
+    &#34;&#34;&#34;
+    if param.intro_errors:
+        introduceRandomErrors()
+        print(&#34;Oops! This experiment will have random errors&#34;)
+    else:
+        print(&#34;Enjoy error-free operation&#34;)
+
+    # Check if enough force is applied for starting flexion
+    if not param.is_flexion_done and not param.is_flexion_started:
+        if param.orthosis_force &lt; -param.f_sensitivity and param.orthosis_position &gt; param.min_pos - param.buffer_pos:
+            param.is_enough_force_for_motion = True
+    # Check if enough force is applied for starting extension
+    elif param.is_flexion_done and param.is_flexion_started:
+        if param.orthosis_force &gt; param.f_sensitivity and param.orthosis_position &lt; param.max_pos:
+            param.is_enough_force_for_motion = False
+
+    # Check if flexion is supposed to be executed
+    if param.is_enough_force_for_motion and not param.is_flexion_done:
+        param.is_flexion_started = True
+        if not param.is_disturbing:
+            executeFlexion(orthosis_handle)
+        elif param.is_disturbing:
+            executeExtension(orthosis_handle)
+            print(&#34;OOPS! Error Introduced!&#34;)
+        # Check if arm is fully flexed
+        if param.orthosis_position &gt;= param.max_pos:
+            param.is_flexion_done = True
+            param.trial_count += 1
+    
+    # Check if extension is supposed to be executed
+    elif not param.is_enough_force_for_motion and param.is_flexion_done:
+        param.is_flexion_started = False
+        if not param.is_disturbing:
+            executeExtension(orthosis_handle)
+        elif param.is_disturbing:
+            executeFlexion(orthosis_handle)
+            print(&#34;OOPS! Error Introduced!&#34;)
+        # Check if arm is fully extended
+        if param.orthosis_position &lt;= param.min_pos + param.buffer_pos:
+            param.is_flexion_done = False
+            param.trial_count += 1
+
+    # Default Condition
+    else:
+        stopMotion(orthosis_handle)
+
+    # Hard limit check
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)
+
+@dispatch(object, object, object)
+def runExperimentRandomError(orthosis_handle, flag_flexion_done, disturbing):
+    &#34;&#34;&#34;
+    This function is the main function for the random error introduction with orthosis experiment.
+    This was developed during Variscia Putri&#39;s Bachelor Thesis (Aug 2022 - Oct 2022) for studying the error potential.
+
+    Conditions:
+        - The force values will only be checked at the beginning of each trial
+        - Once, the force feedback &gt; f_sensitivity, the flexion or extension motions will be executed effortlessly
+        - Depending upon the experiment conditions, param_err.num will be randomly introduced with the following conditions - 
+            -&gt; In each trial (flexion or extension), error will be introduced only once for param_err.duration ms
+            -&gt; Error will be introduced only in the centre part of the movement range
+            -&gt; No error will be introduced in consecutive trials
+
+    Args:
+        flag_flexion_done[0] (sa float)     : bool to check if flexion has been fully executed
+        disturbing[0] (sa float)            : bool to check if the trial is an error trial
+    &#34;&#34;&#34;  
+    if not param_err.num == 0:      
+        if not disturbing[0] and not param_err.is_err_introduced:
+            for i in param_err.err_sequence:
+                if i == param.trial_count:
+                    chooseErrorPosition()
+                    setErrorFlags(disturbing)
+                        
+        if disturbing[0] and not param_err.is_err_introduced:
+            checkErrorDuration(disturbing)
+
+    # Check if enough force is applied for starting flexion
+    if not flag_flexion_done[0] and not param.is_flexion_started:
+        checkFlexionStart()
+    # Check if enough force is applied for starting extension
+    elif flag_flexion_done[0] and param.is_flexion_started:        
+        checkExtensionStart()
+
+    # Check if flexion is supposed to be executed
+    if param.is_enough_force_for_motion and not flag_flexion_done[0]:
+        param.is_flexion_started = True
+        if not disturbing[0]:
+            executeFlexion(orthosis_handle)
+        elif disturbing[0]: 
+            print(f&#34;Error intro at {param_err.err_position} angle&#34;)
+            executeExtension(orthosis_handle)
+        # Check if arm is fully flexed
+        checkFlexionEnd(flag_flexion_done)
+
+    # Check if extension is supposed to be executed
+    elif not param.is_enough_force_for_motion and flag_flexion_done[0]:
+        param.is_flexion_started = False
+        if not disturbing[0]:
+            executeExtension(orthosis_handle)
+        elif disturbing[0]: 
+            print(f&#34;Error intro at {param_err.err_position} angle&#34;)
+            executeFlexion(orthosis_handle)
+        # Check if arm is fully extended
+        checkExtensionEnd(flag_flexion_done)
+    # Default condition
+    else:
+        stopMotion(orthosis_handle)
+    # Hard limit check
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)
+
+
+@dispatch(object, object, object, object, object)
+def runExperimentRandomError(orthosis_handle, flag_flexion_done, disturbing, flag_flexion_started, flag_normal_trigger):
+    &#34;&#34;&#34;
+    This function is the main function for the random error introduction with orthosis experiment.
+    This is a modified version of the one created during Variscia&#39;s Thesis and used by Patrick and Sophia (stud_group_2) for the project
+    Evaluation of Error Potential from EEG by error introduction on orthosis
+
+    Conditions:
+        - The force values will only be checked at the beginning of each trial
+        - Once, the force feedback &gt; f_sensitivity, the flexion or extension motions will be executed effortlessly
+        - Depending upon the experiment conditions, param_err.num will be randomly introduced with the following conditions - 
+            -&gt; In each trial (flexion or extension), error will be introduced only once for param_err.duration ms
+            -&gt; Error will be introduced only in the centre part of the movement range
+            -&gt; No error will be introduced in consecutive trials
+
+    Args:
+        flag_flexion_done[0] (sa float)     : bool to check if flexion has been fully executed
+        disturbing[0] (sa float)            : bool to check if the trial is an error trial
+        flag_flexion_started[0] (sa float)  : bool to check if flexion has started
+        flag_normal_trigger[0] (sa float)   : bool to check if the centre of movement has been reached during non-error execution
+    &#34;&#34;&#34;  
+    if not param_err.num == 0:      
+        if not disturbing[0] and not param_err.is_err_introduced:
+            for i in param_err.err_sequence:
+                if i == param.trial_count:
+                    chooseErrorPosition()
+                    setErrorFlags(disturbing)
+                        
+        if disturbing[0] and not param_err.is_err_introduced:
+            checkErrorDuration(disturbing)
+
+    # Check if enough force is applied for starting flexion
+    if not flag_flexion_done[0] and not flag_flexion_started[0]:
+        checkFlexionStart()
+    # Check if enough force is applied for starting extension
+    elif flag_flexion_done[0] and flag_flexion_started[0]:        
+        checkExtensionStart()
+
+    # Check if flexion is supposed to be executed
+    if param.is_enough_force_for_motion and not flag_flexion_done[0]:
+        flag_flexion_started[0] = True
+        if not disturbing[0]:
+            executeFlexion(orthosis_handle)
+            if not param.trial_count in param_err.err_sequence:
+                setNormalTrigger(flag_normal_trigger)
+        elif disturbing[0]: 
+            print(f&#34;Error intro at {param_err.err_position} angle&#34;)
+            executeExtension(orthosis_handle)
+        # Check if arm is fully flexed
+        checkFlexionEnd(flag_flexion_done)
+
+    # Check if extension is supposed to be executed
+    elif not param.is_enough_force_for_motion and flag_flexion_done[0]:
+        flag_flexion_started[0] = False
+        if not disturbing[0]:
+            executeExtension(orthosis_handle)
+            if not param.trial_count in param_err.err_sequence:
+                setNormalTrigger(flag_normal_trigger)
+        elif disturbing[0]: 
+            print(f&#34;Error intro at {param_err.err_position} angle&#34;)
+            executeFlexion(orthosis_handle)
+        # Check if arm is fully extended
+        checkExtensionEnd(flag_flexion_done)
+    # Default condition
+    else:
+        stopMotion(orthosis_handle)
+    # Hard limit check
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)
+
+
+def triggeredMotion(orthosis_handle):
+    &#34;&#34;&#34;
+    This function performs the main functions of the experiment
+            - detect the onset to start the motion 
+            - complete the full episode (flexion and execution)
+            - provide direciton commands for motion
+    &#34;&#34;&#34;
+    # condition to check if there is an onset_detected
+    if param_viz.onset_detected == True:
+        param_viz.is_triggered = True
+        param_viz.onset_detected = False
+
+    # Logic for episodic motion
+    if param_viz.is_triggered:
+        # Doing a Flexion movement
+        if not param_viz.is_flexion_done and param.orthosis_position &lt; param.max_pos - param.buffer_pos:
+            executeFlexion(orthosis_handle)
+        # Reached upper limit and hence stop
+        elif not param_viz.is_flexion_done and param.orthosis_position &gt; param.max_pos - param.buffer_pos:
+            stopMotion(orthosis_handle)
+            param_viz.is_flexion_done = True
+            time.sleep(0.3) # small delay when on upper position before extension 
+        # Doing an Extension movement 
+        elif param_viz.is_flexion_done and param.orthosis_position &gt; param.min_pos + param.buffer_pos:
+            executeExtension(orthosis_handle)
+        # Reached lower limit. End of the episode
+        elif param_viz.is_flexion_done and param.orthosis_position &lt; param.min_pos + param.buffer_pos:
+            stopMotion(orthosis_handle)
+            param_viz.is_flexion_done = False
+            param_viz.is_triggered = False
+    else:
+        stopMotion(orthosis_handle)
+
+    # If the hard limit is reached
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)
+
+
+def readValues(orthosis_handle):
+    &#34;&#34;&#34;
+    This function provides the feedback from the orthosis by parsing the Serial data
+
+    Returns(pseudo):
+        param.orthosis_voltage        : voltage
+        param.orthosis_deflection     : deflection
+        param.orthosis_force          : force feedback
+        param.orthosis_status         : status
+        param.orthosis_position       : position feedback
+        param.orthosis_f_offset       : force offset
+    &#34;&#34;&#34;
+    values = orthosis_handle.readline()
+    values = values.decode(&#34;utf-8&#34;).strip(&#39;\n&#39;)
+    values = values.split(&#39;;&#39;)
+    if len(values) != 5:
+        return False
+    else:
+        try:
+            param.orthosis_voltage = float(values[0])
+            param.orthosis_deflection = float(values[1])
+            param.orthosis_force = float(values[2])
+            if param.is_calibrated:
+                param.orthosis_force -= param.orthosis_f_offset
+            param.orthosis_status = float(values[3])
+            param.orthosis_position = float(values[4])
+            return True
+        except:
+            return False
+            # pass
+
+
+def introduceRandomErrors():
+    &#34;&#34;&#34;
+    This function randomly introduces errors in the experiment
+
+    Returns(pseudo):
+        param.disturbing  : flag to denote if the error is Introduced
+        param.dist_onset  : time when the error is introduced
+    &#34;&#34;&#34;
+    if not param.is_disturbing:
+        rand_var = random.randint(0,param.n_trials)
+        if rand_var == param.epsilon:
+            param.is_disturbing = True
+            param.dist_onset = time.time()
+    else:
+        if time.time()-param.dist_onset &gt; param.err_duration:
+            param.is_disturbing = False
+ 
+
+def generateErrorSequence():
+    &#34;&#34;&#34;
+    This function generates a list of random error trial positions
+    Conditions:
+        - There should be a gap of atleast 2 between consecutive numbers
+
+    Args:
+        param_err.start_num             : first acceptable trial number in which error can be introduced
+        param.n_trials                  : total number of trials
+        param_err.num                   : total number of errors to be introduced
+
+    Returns:
+        param_err.err_sequence (list)   : list of random trial positions
+    &#34;&#34;&#34;
+    chk_flag = False
+    if param_err.num != 0:
+        while not chk_flag:
+            # Generate a random list of integers containing &#34;n_errors&#34; elements betwen the specified range
+            param_err.err_sequence = random.sample(range(param_err.start_num, param.n_trials), param_err.num)
+            # Sort the list in ascending order
+            param_err.err_sequence.sort()
+            # Check the user defined conditions 
+            ele_counter = 0
+            for i in range(1,len(param_err.err_sequence)):
+                if(param_err.err_sequence[i] - param_err.err_sequence[i-1] &lt; param_err.gap_desired):
+                    continue
+                else:
+                    ele_counter += 1
+
+            if ele_counter == len(param_err.err_sequence)-1:
+                chk_flag = True
+    elif param_err.num == 0:
+        chk_flag = True
+
+
+def chooseErrorPosition():
+    &#34;&#34;&#34;
+    This function generates a random number (position error) between the acceptable error range
+    &#34;&#34;&#34;
+    param_err.err_position = random.randint(param_err.err_min_pos, param_err.err_max_pos)
+
+
+def checkFlexionStart():
+    &#34;&#34;&#34;
+    This function checks if enough force is applied by the wearer to start flexion
+    &#34;&#34;&#34;
+    if param.orthosis_force &lt; -param.f_sensitivity and param.orthosis_position &gt; param.min_pos:
+        param.is_enough_force_for_motion = True
+
+
+def executeFlexion(orthosis_handle):
+    &#34;&#34;&#34;
+    This function sends direction codes to the motor controller to move up
+    &#34;&#34;&#34;
+    for c in param.direction_codes[1]:
+        orthosis_handle.write(c.encode())
+
+
+def checkFlexionEnd(flag_flexion_done):
+    &#34;&#34;&#34;
+    This function checks if the arm is fully flexed
+    &#34;&#34;&#34;
+    if param.orthosis_position &gt;= param.max_pos:
+        flag_flexion_done[0] = True
+        param.trial_count +=1
+        param_err.is_err_introduced = False
+
+
+def checkExtensionStart():
+    &#34;&#34;&#34;
+    This function checks if enough force is applied by the wearer to start extension
+    &#34;&#34;&#34;
+    if param.orthosis_force &gt; param.f_sensitivity + 0.1 and param.orthosis_position &lt; param.max_pos:
+        param.is_enough_force_for_motion = False
+
+
+def executeExtension(orthosis_handle):
+    &#34;&#34;&#34;
+    This function sends direction codes to the motor controller to move down
+    &#34;&#34;&#34;
+    for c in param.direction_codes[2]:
+        orthosis_handle.write(c.encode())
+
+
+def checkExtensionEnd(flag_flexion_done):
+    &#34;&#34;&#34;
+    This function checks if the arm is fully extended
+    &#34;&#34;&#34;
+    if param.orthosis_position &lt;= param.min_pos:
+        flag_flexion_done[0] = False
+        param.trial_count += 1
+        param_err.is_err_introduced = False
+
+
+def stopMotion(orthosis_handle):
+    &#34;&#34;&#34;
+    This function sends direction codes to the motor controller to halt
+    &#34;&#34;&#34;
+    for c in param.direction_codes[0]:
+        orthosis_handle.write(c.encode())
+
+
+def setNormalTrigger(flag_normal_trigger):
+    &#34;&#34;&#34;
+    This function checks if the orthosis is near the middle of its range of motion and 
+    sets the normal trigger flag accordingly
+    &#34;&#34;&#34;
+    if (param.orthosis_position &gt;= param_err.err_min_pos - param_err.buffer_pos) and \
+                            (param.orthosis_position &lt;= param_err.err_max_pos + param_err.buffer_pos):
+        flag_normal_trigger[0] = 1.0
+    else:
+        flag_normal_trigger[0] = 0.0
+
+
+def setErrorFlags(disturbing):
+    &#34;&#34;&#34;
+    This function checks if the orthosis is near the middle of its range of motion and
+    sets the disturbing flag and initialises the dist_onset timer
+    &#34;&#34;&#34;
+    if (param.orthosis_position &gt;= param_err.err_position - param_err.buffer_pos) and \
+                            (param.orthosis_position &lt;= param_err.err_position + param_err.buffer_pos):
+        disturbing[0] = True
+        param.dist_onset = time.time()
+
+
+def checkErrorDuration(disturbing):
+    &#34;&#34;&#34;
+    This function checks the error duration and if it is exceeded, sets the error flags to False 
+    indicating that the error will no more be introduced in the movement 
+    &#34;&#34;&#34;
+    if(time.time()-param.dist_onset &gt; param_err.duration):
+        disturbing[0] = False
+        param_err.is_err_introduced = True
+        param_err.err_count += 1
+
+def headerFile():
+    &#34;&#34;&#34;
+    This function creates a header section for the log file with the experiment info
+    &#34;&#34;&#34;
+    with open(f&#34;{param.filename}.txt&#34;,&#39;w&#39;) as f:
+        f.write(f&#34;Subject Name  : {param.sub_name} \n&#34;)
+        f.write(f&#34;Error duration: {param_err.duration} \n&#34;)
+        f.write(f&#34;Total errors  : {param_err.num} \n&#34;)
+        f.write(f&#34;Scenario      : {param.expt_scenario} \n&#34;)
+        # f.write(f&#34;Sequence      : {param.error_sequence} \n&#34;)
+        f.write(f&#34;Suffix        : {param.expt_suffix} \n&#34;)
+        f.write(f&#34;Set number    : {param.set_num} \n&#34;)
+        f.write(&#39;Data Collection \n\n\n&#39;)  
+    f.close()
+
+
+def establishZMQ():
+    &#34;&#34;&#34;
+    This function sets up the ZMQ Server client connection
+    &#34;&#34;&#34;
+    my_context      = zmq.Context()
+    my_socket       = my_context.socket(zmq.SUB)
+    my_socket.connect(&#34;tcp://&#34;+param.zmq_server_ip)
+    my_socket.setsockopt(zmq.SUBSCRIBE, param.zmq_topic)
+
+    return my_socket
+    </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="lib.orthosis_lib.calibrate"><code class="name flex">
+<span>def <span class="ident">calibrate</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function calibrates the force offset for the user</p>
+<p>Returns(pseudo):
+param.f_offset : average offset in force
+param.is_calibrated
+: flag to indicate that the hand is calibrated</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calibrate(orthosis_handle):
+    &#34;&#34;&#34;
+    This function calibrates the force offset for the user
+
+    Returns(pseudo):
+        param.f_offset : average offset in force
+        param.is_calibrated   : flag to indicate that the hand is calibrated
+    &#34;&#34;&#34;
+    n=10
+    m=0
+    for i in range(n):
+        if readValues(orthosis_handle):
+            m+=1
+            param.orthosis_f_offset += param.orthosis_force
+    param.orthosis_f_offset /= float(m)
+    param.is_calibrated = True</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.checkErrorDuration"><code class="name flex">
+<span>def <span class="ident">checkErrorDuration</span></span>(<span>disturbing)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks the error duration and if it is exceeded, sets the error flags to False
+indicating that the error will no more be introduced in the movement</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkErrorDuration(disturbing):
+    &#34;&#34;&#34;
+    This function checks the error duration and if it is exceeded, sets the error flags to False 
+    indicating that the error will no more be introduced in the movement 
+    &#34;&#34;&#34;
+    if(time.time()-param.dist_onset &gt; param_err.duration):
+        disturbing[0] = False
+        param_err.is_err_introduced = True
+        param_err.err_count += 1</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.checkExtensionEnd"><code class="name flex">
+<span>def <span class="ident">checkExtensionEnd</span></span>(<span>flag_flexion_done)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks if the arm is fully extended</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkExtensionEnd(flag_flexion_done):
+    &#34;&#34;&#34;
+    This function checks if the arm is fully extended
+    &#34;&#34;&#34;
+    if param.orthosis_position &lt;= param.min_pos:
+        flag_flexion_done[0] = False
+        param.trial_count += 1
+        param_err.is_err_introduced = False</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.checkExtensionStart"><code class="name flex">
+<span>def <span class="ident">checkExtensionStart</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks if enough force is applied by the wearer to start extension</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkExtensionStart():
+    &#34;&#34;&#34;
+    This function checks if enough force is applied by the wearer to start extension
+    &#34;&#34;&#34;
+    if param.orthosis_force &gt; param.f_sensitivity + 0.1 and param.orthosis_position &lt; param.max_pos:
+        param.is_enough_force_for_motion = False</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.checkFlexionEnd"><code class="name flex">
+<span>def <span class="ident">checkFlexionEnd</span></span>(<span>flag_flexion_done)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks if the arm is fully flexed</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkFlexionEnd(flag_flexion_done):
+    &#34;&#34;&#34;
+    This function checks if the arm is fully flexed
+    &#34;&#34;&#34;
+    if param.orthosis_position &gt;= param.max_pos:
+        flag_flexion_done[0] = True
+        param.trial_count +=1
+        param_err.is_err_introduced = False</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.checkFlexionStart"><code class="name flex">
+<span>def <span class="ident">checkFlexionStart</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks if enough force is applied by the wearer to start flexion</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def checkFlexionStart():
+    &#34;&#34;&#34;
+    This function checks if enough force is applied by the wearer to start flexion
+    &#34;&#34;&#34;
+    if param.orthosis_force &lt; -param.f_sensitivity and param.orthosis_position &gt; param.min_pos:
+        param.is_enough_force_for_motion = True</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.chooseErrorPosition"><code class="name flex">
+<span>def <span class="ident">chooseErrorPosition</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function generates a random number (position error) between the acceptable error range</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chooseErrorPosition():
+    &#34;&#34;&#34;
+    This function generates a random number (position error) between the acceptable error range
+    &#34;&#34;&#34;
+    param_err.err_position = random.randint(param_err.err_min_pos, param_err.err_max_pos)</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.establishZMQ"><code class="name flex">
+<span>def <span class="ident">establishZMQ</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function sets up the ZMQ Server client connection</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def establishZMQ():
+    &#34;&#34;&#34;
+    This function sets up the ZMQ Server client connection
+    &#34;&#34;&#34;
+    my_context      = zmq.Context()
+    my_socket       = my_context.socket(zmq.SUB)
+    my_socket.connect(&#34;tcp://&#34;+param.zmq_server_ip)
+    my_socket.setsockopt(zmq.SUBSCRIBE, param.zmq_topic)
+
+    return my_socket</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.executeExtension"><code class="name flex">
+<span>def <span class="ident">executeExtension</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function sends direction codes to the motor controller to move down</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def executeExtension(orthosis_handle):
+    &#34;&#34;&#34;
+    This function sends direction codes to the motor controller to move down
+    &#34;&#34;&#34;
+    for c in param.direction_codes[2]:
+        orthosis_handle.write(c.encode())</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.executeFlexion"><code class="name flex">
+<span>def <span class="ident">executeFlexion</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function sends direction codes to the motor controller to move up</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def executeFlexion(orthosis_handle):
+    &#34;&#34;&#34;
+    This function sends direction codes to the motor controller to move up
+    &#34;&#34;&#34;
+    for c in param.direction_codes[1]:
+        orthosis_handle.write(c.encode())</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.forceControl"><code class="name flex">
+<span>def <span class="ident">forceControl</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function performs the main functions of the experiment
+- detect the sensitivity of the force to start the motion
+- introduce errors
+- provide direciton commands for motion</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def forceControl(orthosis_handle):
+    &#34;&#34;&#34;
+    This function performs the main functions of the experiment
+            - detect the sensitivity of the force to start the motion
+            - introduce errors
+            - provide direciton commands for motion
+    &#34;&#34;&#34;
+    if param.intro_errors:
+        introduceRandomErrors()
+        print(&#34;Oops! This experiment will have random errors&#34;)
+    else:
+        print(&#34;Enjoy error-free operation&#34;)
+
+    # Check if the hand is moving up
+    if param.orthosis_force &lt; -param.f_sensitivity:
+        if not param.is_disturbing:
+            executeFlexion(orthosis_handle)
+        else:
+            executeExtension(orthosis_handle)
+            print (&#34;Error Introduced&#34;)
+    # Check if the hand is moving down 
+    elif param.orthosis_force &gt; param.f_sensitivity:
+        if not param.is_disturbing:
+            executeExtension(orthosis_handle)
+        else:
+            executeFlexion(orthosis_handle)
+            print (&#34;Error Introduced&#34;)
+    # Default condition
+    else:
+        stopMotion(orthosis_handle)
+
+    # If the hard limit is reached
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.generateErrorSequence"><code class="name flex">
+<span>def <span class="ident">generateErrorSequence</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function generates a list of random error trial positions</p>
+<h2 id="conditions">Conditions</h2>
+<ul>
+<li>There should be a gap of atleast 2 between consecutive numbers</li>
+</ul>
+<h2 id="args">Args</h2>
+<p>param_err.start_num
+: first acceptable trial number in which error can be introduced
+param.n_trials
+: total number of trials
+param_err.num
+: total number of errors to be introduced</p>
+<h2 id="returns">Returns</h2>
+<p>param_err.err_sequence (list)
+: list of random trial positions</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generateErrorSequence():
+    &#34;&#34;&#34;
+    This function generates a list of random error trial positions
+    Conditions:
+        - There should be a gap of atleast 2 between consecutive numbers
+
+    Args:
+        param_err.start_num             : first acceptable trial number in which error can be introduced
+        param.n_trials                  : total number of trials
+        param_err.num                   : total number of errors to be introduced
+
+    Returns:
+        param_err.err_sequence (list)   : list of random trial positions
+    &#34;&#34;&#34;
+    chk_flag = False
+    if param_err.num != 0:
+        while not chk_flag:
+            # Generate a random list of integers containing &#34;n_errors&#34; elements betwen the specified range
+            param_err.err_sequence = random.sample(range(param_err.start_num, param.n_trials), param_err.num)
+            # Sort the list in ascending order
+            param_err.err_sequence.sort()
+            # Check the user defined conditions 
+            ele_counter = 0
+            for i in range(1,len(param_err.err_sequence)):
+                if(param_err.err_sequence[i] - param_err.err_sequence[i-1] &lt; param_err.gap_desired):
+                    continue
+                else:
+                    ele_counter += 1
+
+            if ele_counter == len(param_err.err_sequence)-1:
+                chk_flag = True
+    elif param_err.num == 0:
+        chk_flag = True</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.headerFile"><code class="name flex">
+<span>def <span class="ident">headerFile</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function creates a header section for the log file with the experiment info</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def headerFile():
+    &#34;&#34;&#34;
+    This function creates a header section for the log file with the experiment info
+    &#34;&#34;&#34;
+    with open(f&#34;{param.filename}.txt&#34;,&#39;w&#39;) as f:
+        f.write(f&#34;Subject Name  : {param.sub_name} \n&#34;)
+        f.write(f&#34;Error duration: {param_err.duration} \n&#34;)
+        f.write(f&#34;Total errors  : {param_err.num} \n&#34;)
+        f.write(f&#34;Scenario      : {param.expt_scenario} \n&#34;)
+        # f.write(f&#34;Sequence      : {param.error_sequence} \n&#34;)
+        f.write(f&#34;Suffix        : {param.expt_suffix} \n&#34;)
+        f.write(f&#34;Set number    : {param.set_num} \n&#34;)
+        f.write(&#39;Data Collection \n\n\n&#39;)  
+    f.close()</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.introduceRandomErrors"><code class="name flex">
+<span>def <span class="ident">introduceRandomErrors</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function randomly introduces errors in the experiment</p>
+<p>Returns(pseudo):
+param.disturbing
+: flag to denote if the error is Introduced
+param.dist_onset
+: time when the error is introduced</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def introduceRandomErrors():
+    &#34;&#34;&#34;
+    This function randomly introduces errors in the experiment
+
+    Returns(pseudo):
+        param.disturbing  : flag to denote if the error is Introduced
+        param.dist_onset  : time when the error is introduced
+    &#34;&#34;&#34;
+    if not param.is_disturbing:
+        rand_var = random.randint(0,param.n_trials)
+        if rand_var == param.epsilon:
+            param.is_disturbing = True
+            param.dist_onset = time.time()
+    else:
+        if time.time()-param.dist_onset &gt; param.err_duration:
+            param.is_disturbing = False</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.readValues"><code class="name flex">
+<span>def <span class="ident">readValues</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function provides the feedback from the orthosis by parsing the Serial data</p>
+<p>Returns(pseudo):
+param.orthosis_voltage
+: voltage
+param.orthosis_deflection
+: deflection
+param.orthosis_force
+: force feedback
+param.orthosis_status
+: status
+param.orthosis_position
+: position feedback
+param.orthosis_f_offset
+: force offset</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readValues(orthosis_handle):
+    &#34;&#34;&#34;
+    This function provides the feedback from the orthosis by parsing the Serial data
+
+    Returns(pseudo):
+        param.orthosis_voltage        : voltage
+        param.orthosis_deflection     : deflection
+        param.orthosis_force          : force feedback
+        param.orthosis_status         : status
+        param.orthosis_position       : position feedback
+        param.orthosis_f_offset       : force offset
+    &#34;&#34;&#34;
+    values = orthosis_handle.readline()
+    values = values.decode(&#34;utf-8&#34;).strip(&#39;\n&#39;)
+    values = values.split(&#39;;&#39;)
+    if len(values) != 5:
+        return False
+    else:
+        try:
+            param.orthosis_voltage = float(values[0])
+            param.orthosis_deflection = float(values[1])
+            param.orthosis_force = float(values[2])
+            if param.is_calibrated:
+                param.orthosis_force -= param.orthosis_f_offset
+            param.orthosis_status = float(values[3])
+            param.orthosis_position = float(values[4])
+            return True
+        except:
+            return False
+            # pass</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.runExperiment"><code class="name flex">
+<span>def <span class="ident">runExperiment</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function is the main function for the basic orthosis experiment.</p>
+<h2 id="conditions">Conditions</h2>
+<ul>
+<li>The force values will only be checked at the beginning of each trial</li>
+<li>Once, the force feedback &gt; f_sensitivity, the flexion or extension motions will be executed effortlessly</li>
+</ul>
+<h2 id="args">Args</h2>
+<p>param.is_flexion_done (bool)
+: bool to check if flexion has been fully executed
+param.is_flexion_started (bool)
+: bool to check if flexion has started. If False - means that extension has started
+param.is_enough_force_for_flexion (bool)
+: bool to check the force condition. If False - means that there is enough force for extension</p>
+<h2 id="returns">Returns</h2>
+<p>param.trial_count (int)
+: total number of trials executed</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def runExperiment(orthosis_handle):
+    &#34;&#34;&#34;
+    This function is the main function for the basic orthosis experiment.
+    Conditions:
+        - The force values will only be checked at the beginning of each trial
+        - Once, the force feedback &gt; f_sensitivity, the flexion or extension motions will be executed effortlessly
+
+    Args:
+        param.is_flexion_done (bool)                : bool to check if flexion has been fully executed
+        param.is_flexion_started (bool)             : bool to check if flexion has started. If False - means that extension has started
+        param.is_enough_force_for_flexion (bool)    : bool to check the force condition. If False - means that there is enough force for extension
+
+    Returns:
+        param.trial_count (int)                     : total number of trials executed
+
+    &#34;&#34;&#34;
+    if param.intro_errors:
+        introduceRandomErrors()
+        print(&#34;Oops! This experiment will have random errors&#34;)
+    else:
+        print(&#34;Enjoy error-free operation&#34;)
+
+    # Check if enough force is applied for starting flexion
+    if not param.is_flexion_done and not param.is_flexion_started:
+        if param.orthosis_force &lt; -param.f_sensitivity and param.orthosis_position &gt; param.min_pos - param.buffer_pos:
+            param.is_enough_force_for_motion = True
+    # Check if enough force is applied for starting extension
+    elif param.is_flexion_done and param.is_flexion_started:
+        if param.orthosis_force &gt; param.f_sensitivity and param.orthosis_position &lt; param.max_pos:
+            param.is_enough_force_for_motion = False
+
+    # Check if flexion is supposed to be executed
+    if param.is_enough_force_for_motion and not param.is_flexion_done:
+        param.is_flexion_started = True
+        if not param.is_disturbing:
+            executeFlexion(orthosis_handle)
+        elif param.is_disturbing:
+            executeExtension(orthosis_handle)
+            print(&#34;OOPS! Error Introduced!&#34;)
+        # Check if arm is fully flexed
+        if param.orthosis_position &gt;= param.max_pos:
+            param.is_flexion_done = True
+            param.trial_count += 1
+    
+    # Check if extension is supposed to be executed
+    elif not param.is_enough_force_for_motion and param.is_flexion_done:
+        param.is_flexion_started = False
+        if not param.is_disturbing:
+            executeExtension(orthosis_handle)
+        elif param.is_disturbing:
+            executeFlexion(orthosis_handle)
+            print(&#34;OOPS! Error Introduced!&#34;)
+        # Check if arm is fully extended
+        if param.orthosis_position &lt;= param.min_pos + param.buffer_pos:
+            param.is_flexion_done = False
+            param.trial_count += 1
+
+    # Default Condition
+    else:
+        stopMotion(orthosis_handle)
+
+    # Hard limit check
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.setErrorFlags"><code class="name flex">
+<span>def <span class="ident">setErrorFlags</span></span>(<span>disturbing)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks if the orthosis is near the middle of its range of motion and
+sets the disturbing flag and initialises the dist_onset timer</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setErrorFlags(disturbing):
+    &#34;&#34;&#34;
+    This function checks if the orthosis is near the middle of its range of motion and
+    sets the disturbing flag and initialises the dist_onset timer
+    &#34;&#34;&#34;
+    if (param.orthosis_position &gt;= param_err.err_position - param_err.buffer_pos) and \
+                            (param.orthosis_position &lt;= param_err.err_position + param_err.buffer_pos):
+        disturbing[0] = True
+        param.dist_onset = time.time()</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.setNormalTrigger"><code class="name flex">
+<span>def <span class="ident">setNormalTrigger</span></span>(<span>flag_normal_trigger)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function checks if the orthosis is near the middle of its range of motion and
+sets the normal trigger flag accordingly</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setNormalTrigger(flag_normal_trigger):
+    &#34;&#34;&#34;
+    This function checks if the orthosis is near the middle of its range of motion and 
+    sets the normal trigger flag accordingly
+    &#34;&#34;&#34;
+    if (param.orthosis_position &gt;= param_err.err_min_pos - param_err.buffer_pos) and \
+                            (param.orthosis_position &lt;= param_err.err_max_pos + param_err.buffer_pos):
+        flag_normal_trigger[0] = 1.0
+    else:
+        flag_normal_trigger[0] = 0.0</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.stopMotion"><code class="name flex">
+<span>def <span class="ident">stopMotion</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function sends direction codes to the motor controller to halt</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stopMotion(orthosis_handle):
+    &#34;&#34;&#34;
+    This function sends direction codes to the motor controller to halt
+    &#34;&#34;&#34;
+    for c in param.direction_codes[0]:
+        orthosis_handle.write(c.encode())</code></pre>
+</details>
+</dd>
+<dt id="lib.orthosis_lib.triggeredMotion"><code class="name flex">
+<span>def <span class="ident">triggeredMotion</span></span>(<span>orthosis_handle)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function performs the main functions of the experiment
+- detect the onset to start the motion
+- complete the full episode (flexion and execution)
+- provide direciton commands for motion</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def triggeredMotion(orthosis_handle):
+    &#34;&#34;&#34;
+    This function performs the main functions of the experiment
+            - detect the onset to start the motion 
+            - complete the full episode (flexion and execution)
+            - provide direciton commands for motion
+    &#34;&#34;&#34;
+    # condition to check if there is an onset_detected
+    if param_viz.onset_detected == True:
+        param_viz.is_triggered = True
+        param_viz.onset_detected = False
+
+    # Logic for episodic motion
+    if param_viz.is_triggered:
+        # Doing a Flexion movement
+        if not param_viz.is_flexion_done and param.orthosis_position &lt; param.max_pos - param.buffer_pos:
+            executeFlexion(orthosis_handle)
+        # Reached upper limit and hence stop
+        elif not param_viz.is_flexion_done and param.orthosis_position &gt; param.max_pos - param.buffer_pos:
+            stopMotion(orthosis_handle)
+            param_viz.is_flexion_done = True
+            time.sleep(0.3) # small delay when on upper position before extension 
+        # Doing an Extension movement 
+        elif param_viz.is_flexion_done and param.orthosis_position &gt; param.min_pos + param.buffer_pos:
+            executeExtension(orthosis_handle)
+        # Reached lower limit. End of the episode
+        elif param_viz.is_flexion_done and param.orthosis_position &lt; param.min_pos + param.buffer_pos:
+            stopMotion(orthosis_handle)
+            param_viz.is_flexion_done = False
+            param_viz.is_triggered = False
+    else:
+        stopMotion(orthosis_handle)
+
+    # If the hard limit is reached
+    if param.orthosis_position &gt;= param.max_pos or param.orthosis_position &lt;= param.min_pos:
+        stopMotion(orthosis_handle)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="lib" href="index.html">lib</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="lib.orthosis_lib.calibrate" href="#lib.orthosis_lib.calibrate">calibrate</a></code></li>
+<li><code><a title="lib.orthosis_lib.checkErrorDuration" href="#lib.orthosis_lib.checkErrorDuration">checkErrorDuration</a></code></li>
+<li><code><a title="lib.orthosis_lib.checkExtensionEnd" href="#lib.orthosis_lib.checkExtensionEnd">checkExtensionEnd</a></code></li>
+<li><code><a title="lib.orthosis_lib.checkExtensionStart" href="#lib.orthosis_lib.checkExtensionStart">checkExtensionStart</a></code></li>
+<li><code><a title="lib.orthosis_lib.checkFlexionEnd" href="#lib.orthosis_lib.checkFlexionEnd">checkFlexionEnd</a></code></li>
+<li><code><a title="lib.orthosis_lib.checkFlexionStart" href="#lib.orthosis_lib.checkFlexionStart">checkFlexionStart</a></code></li>
+<li><code><a title="lib.orthosis_lib.chooseErrorPosition" href="#lib.orthosis_lib.chooseErrorPosition">chooseErrorPosition</a></code></li>
+<li><code><a title="lib.orthosis_lib.establishZMQ" href="#lib.orthosis_lib.establishZMQ">establishZMQ</a></code></li>
+<li><code><a title="lib.orthosis_lib.executeExtension" href="#lib.orthosis_lib.executeExtension">executeExtension</a></code></li>
+<li><code><a title="lib.orthosis_lib.executeFlexion" href="#lib.orthosis_lib.executeFlexion">executeFlexion</a></code></li>
+<li><code><a title="lib.orthosis_lib.forceControl" href="#lib.orthosis_lib.forceControl">forceControl</a></code></li>
+<li><code><a title="lib.orthosis_lib.generateErrorSequence" href="#lib.orthosis_lib.generateErrorSequence">generateErrorSequence</a></code></li>
+<li><code><a title="lib.orthosis_lib.headerFile" href="#lib.orthosis_lib.headerFile">headerFile</a></code></li>
+<li><code><a title="lib.orthosis_lib.introduceRandomErrors" href="#lib.orthosis_lib.introduceRandomErrors">introduceRandomErrors</a></code></li>
+<li><code><a title="lib.orthosis_lib.readValues" href="#lib.orthosis_lib.readValues">readValues</a></code></li>
+<li><code><a title="lib.orthosis_lib.runExperiment" href="#lib.orthosis_lib.runExperiment">runExperiment</a></code></li>
+<li><code><a title="lib.orthosis_lib.setErrorFlags" href="#lib.orthosis_lib.setErrorFlags">setErrorFlags</a></code></li>
+<li><code><a title="lib.orthosis_lib.setNormalTrigger" href="#lib.orthosis_lib.setNormalTrigger">setNormalTrigger</a></code></li>
+<li><code><a title="lib.orthosis_lib.stopMotion" href="#lib.orthosis_lib.stopMotion">stopMotion</a></code></li>
+<li><code><a title="lib.orthosis_lib.triggeredMotion" href="#lib.orthosis_lib.triggeredMotion">triggeredMotion</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
