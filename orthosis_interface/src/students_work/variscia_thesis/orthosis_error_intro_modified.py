@@ -32,7 +32,7 @@ import param.error_param as param_err
 # Uncomment the following if you have pip installed the orthosis_lib
 # import orthosis_lib.orthosis_v1_lib as orthosis_lib
 # Uncomment the following otherwise
-import lib.orthosis_lib.orthosis_v1_lib as orthosis_lib
+import lib.orthosis_v1_lib_modified as orthosis_lib
 
 
 
@@ -44,14 +44,23 @@ def runOrthosis():
     disturbing[0] = False
     flag_flexion_done[0] = False
     inp_msg[0] = 1
+    i = 0
+    for i in range(len(param_err.err_sequence)):
+        error_seq[i] = param_err.err_sequence[i]
+
     print("Orthosis Process Ready!!")
+    trial_counter[0] = 0
     while param.trial_count < param.n_trials:
         orthosis_lib.readValues(orthosis_handle)
         orthosis_lib.runExperimentRandomError(orthosis_handle, flag_flexion_done, disturbing)
+        trial_counter[0] = param.trial_count
+        current_pos[0] = param.orthosis_position
+        error_pos[0] = param_err.err_position
         if param.is_verbose and not is_write[0]:
             print(f"Trial Count: {param.trial_count}")
             print(f"Error Count: {param_err.err_count}")
             print(f"Error Seq  : {param_err.err_sequence}")
+    print("done!!!")
     inp_msg[0] = 2
 
 
@@ -106,10 +115,13 @@ def runButton():
 #             end_time[0] = time.perf_counter()
 #         print(f"Server msg received: {inp_msg[0]}")
 
+def mapAngle(angle):
+    real_angle = 0.1*angle-90
+    return real_angle
 
 def runLogger():
     param.is_logger_running = True
-    orthosis_lib.headerFile()
+    # orthosis_lib.headerFile(error_seq)
     is_write[0] = False
     loop_idx    = 0
     loop_freq   = 1000
@@ -121,14 +133,19 @@ def runLogger():
         loop_idx += 1
         if inp_msg[0] == 1: 
             data_list_q.put("Measurement Start!!" + '\n') 
+            start_time[0] = time.perf_counter()
             inp_msg[0]= 3
         elif inp_msg[0] == 2: 
             data_list_q.put("Measurement End!!" + '\n')
+            end_time[0] = time.perf_counter()
             inp_msg[0] = 4
             is_write[0] = True
             print(f"is_write {is_write[0]}")
         if inp_msg[0] == 3:
-            data_list_q.put(time.perf_counter() - start_time[0])
+            data_list_q.put(f" ,{trial_counter[0]}")
+            data_list_q.put(f" ,{mapAngle(current_pos[0])}")
+            data_list_q.put(f" ,{mapAngle(error_pos[0])}")
+            #data_list_q.put(time.perf_counter() - start_time[0])
             # Flexion or Extension
             if not flag_flexion_done[0]:
                 data_list_q.put(' ,F')
@@ -149,6 +166,7 @@ def runLogger():
         if is_write[0]:
             print("Exiting Logger Loop!")
             print("Entered file condition")
+            orthosis_lib.headerFile(error_seq)
             f = open("%s.txt" %param.filename, "a+")
             f.write(f"Measurement Duration : {end_time[0] - start_time[0]}")
             f.write('\n\n')
@@ -193,7 +211,7 @@ if __name__ == "__main__":
     if args['sensitivity'] is not None:
         param.f_sensitivity = float(args['sensitivity'])
     if args['n_trial'] is not None:
-        param.n_trials = float(args['n_trial'])
+        param.n_trials = int(args['n_trial'])
 
     if args['sub_name'] is not None:
         param.sub_name = args['sub_name']
@@ -210,7 +228,7 @@ if __name__ == "__main__":
     today     =   datetime.date.today() 
     # param.filename  =   '../data/' + str(today.strftime("%d%m%Y")) + '_' + param.sub_name + '_' + param.expt_scenario + '_' + param.expt_seq + '_' + param.expt_suffix + '_' + param.set_num + '_orthosis'
     # param.filename  =   str(today.strftime("%d%m%Y")) + '_' + param.sub_name + '_' + param.expt_scenario + '_' + param.expt_seq + '_' + param.expt_suffix + '_' + param.set_num
-    param.filename  =   '../test_proj/' + str(today.strftime("%d%m%Y")) + '_' + param.sub_name + '_' + param.expt_scenario + '_' + param.expt_seq + '_' + param.expt_suffix + '_' + param.set_num + '_orthosis'
+    param.filename  =   '../../../data/' + str(today.strftime("%d%m%Y")) + '_' + param.sub_name + '_' + param.expt_scenario + '_' + param.expt_seq + '_' + param.expt_suffix + '_' + param.set_num + '_orthosis'
     
     # Queue object to append all values to log 
     data_list_q     = mp.Queue()
@@ -224,6 +242,10 @@ if __name__ == "__main__":
         sa.delete("shm://dist")
         sa.delete("shm://start")
         sa.delete("shm://end")
+        sa.delete("shm://trialCount")
+        sa.delete("shm://position")
+        sa.delete("shm://err_pos")
+        sa.delete("shm://err_seq")
 
     # Creating SharedArrays
     inp_msg             = sa.create("shm://test",1)
@@ -235,6 +257,12 @@ if __name__ == "__main__":
     is_pressed          = sa.create("shm://button",1)
     flag_flexion_done   = sa.create("shm://flex",1)
     disturbing          = sa.create("shm://dist",1)
+    trial_counter       = sa.create("shm://trialCount",1)
+    current_pos         = sa.create("shm://position",1)
+    error_pos           = sa.create("shm://err_pos",1)
+    error_seq           = sa.create("shm://err_seq",param_err.num)
+
+    
 
     # Process 1 - Orthosis process
     pr_orthosis    = mp.Process(target=runOrthosis)
