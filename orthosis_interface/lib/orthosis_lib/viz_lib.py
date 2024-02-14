@@ -22,7 +22,8 @@ def loadAndProcessEMGData():
 
     # Read data 
     #TODO: Move the read data function to the main source file.
-    data = np.loadtxt("../../data/EMG_TIR.txt")
+    # data = np.loadtxt("../../data/EMG_TIR.txt")
+    data = np.loadtxt("/home/experiment/Dokumente/Repos/student_project/OrthosisProject/orthosis_interface/data/EMG_TIR.txt")
 
     # Get EMG data channels used 
     emg_data = data[:,0:-2]

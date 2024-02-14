@@ -24,11 +24,11 @@ import param.pseudo_viz_param as param_viz
 
 ## Library Imports
 # Uncomment the following if you have pip installed the orthosis_lib
-from orthosis_lib.orthosis_v2_lib_oop import OrthosisLib
-import orthosis_lib.viz_lib as viz_lib
+# from orthosis_lib.orthosis_v2_lib_oop import OrthosisLib
+# import orthosis_lib.viz_lib as viz_lib
 # Uncomment the following otherwise
-# from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib
-# import lib.orthosis_lib.viz_lib as viz_lib
+from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib
+import lib.orthosis_lib.viz_lib as viz_lib
 
 
 
@@ -73,7 +73,7 @@ def runViz():
     """
     while not viz_start_flag[0]:
         pass
-    
+    print ("Entered viz process!")
     emg_pseudo_online, onset_sample_shown, onset_value, emg_norm = viz_lib.loadAndProcessEMGData()
     fig = plt.figure()
     anim = animation.FuncAnimation(fig, viz_lib.updateViz, frames = len(emg_pseudo_online)+1, interval = param_viz.update_interval, blit = False, fargs = (emg_pseudo_online, onset_sample_shown, onset_value, emg_norm, onset_detected))
