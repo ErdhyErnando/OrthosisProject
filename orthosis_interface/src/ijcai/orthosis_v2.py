@@ -10,9 +10,6 @@ import serial
 import multiprocessing as mp
 import time
 import SharedArray as sa
-from pynput.keyboard import Listener  as KeyboardListener
-from pynput.mouse    import Listener  as MouseListener
-from pynput.keyboard import Key
 
 # Appending the relative path of the root folder
 import sys, os
@@ -61,48 +58,28 @@ def runOrthosis():
     # Stopping the experiment
     orthosis_obj.orthosis_handle.disable_motor()
 
-
-# def runButton():
-#     button_obj = ButtonLib('/dev/ttyUSB0',9600)
-#     setattr(button_obj,'is_listener_running', True)
-#     is_pressed[0] = 0.0
-#     signal.signal(signal.SIGINT, button_obj.signalHandler)
-#     signal.signal(signal.SIGQUIT, button_obj.signalHandler)
-#     signal.signal(signal.SIGTSTP, button_obj.signalHandler)
-#     print("Button Listener Ready!!")
-#     while getattr(button_obj,'is_listener_running'):
-#         if button_obj.button_handle.in_waiting > 0:
-#             button_val = button_obj.button_handle.read().decode("utf-8")
-#             setattr(button_obj,'button_val',button_val)
-#             if getattr(button_obj,'button_val') == '-':
-#                 is_pressed[0] = True
-#                 print("Button Pressed!!")
-#             elif getattr(button_obj,'button_val') == ',':
-#                 is_pressed[0] = False
-#         # Safe Keyboard Interrupt
-#         if getattr(button_obj,'safe_interrupt'):
-#             print("Exiting Button process safely!")
-#             break
-
 def runButton():
-    def on_release(key):
-        if key == Key.esc:
-            print("exit run Button")
-            m_listener.stop()
-            return False   
+    button_obj = ButtonLib('/dev/ttyUSB0',9600)
+    setattr(button_obj,'is_listener_running', True)
+    is_pressed[0] = 0.0
+    signal.signal(signal.SIGINT, button_obj.signalHandler)
+    signal.signal(signal.SIGQUIT, button_obj.signalHandler)
+    signal.signal(signal.SIGTSTP, button_obj.signalHandler)
+    print("Button Listener Ready!!")
+    while getattr(button_obj,'is_listener_running'):
+        if button_obj.button_handle.in_waiting > 0:
+            button_val = button_obj.button_handle.read().decode("utf-8")
+            setattr(button_obj,'button_val',button_val)
+            if getattr(button_obj,'button_val') == '-':
+                is_pressed[0] = True
+                print("Button Pressed!!")
+            elif getattr(button_obj,'button_val') == ',':
+                is_pressed[0] = False
+        # Safe Keyboard Interrupt
+        if getattr(button_obj,'safe_interrupt'):
+            print("Exiting Button process safely!")
+            break
 
-    def on_click(x, y, button, pressed):
-        if pressed:
-            is_pressed[0] = True
-            print("Button Pressed!!")
-        else:
-            is_pressed[0] = False
-            print("Button Released")
-
-    with KeyboardListener(on_release=on_release) as k_listener, \
-        MouseListener(on_click=on_click) as m_listener:
-            k_listener.join()
-            m_listener.join()
 
 def runTrigger():
     trig_obj = TrigLib('/dev/ttyUSB1', 9600)
