@@ -4,8 +4,8 @@ char inChar;
 
 void setup() {
   // put your setup code here, to run once:
-  serial.begin(9600);
-  serial.setTimeout(1);
+  Serial.begin(9600);
+  Serial.setTimeout(1);
 
   pinMode(LED,OUTPUT);
 
@@ -14,7 +14,7 @@ void setup() {
 }
 
 void loop() {
-  while(Serial.available){
+  while(Serial.available()){
 
     inChar = (char)Serial.read();
 
