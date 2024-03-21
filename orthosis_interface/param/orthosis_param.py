@@ -11,7 +11,7 @@ orthosis_baud_rate              = 128000
 button_port_name                = '/dev/ttyUSB1'
 button_baud_rate                = 9600
 
-zmq_server_ip                   = "192.168.217.112:34761"
+zmq_server_ip                   = "169.254.192.78:34761"
 
 ## Direction of Motion ##
 move_up                         = ['a', '1', ';', 'b', '0', ';' ]

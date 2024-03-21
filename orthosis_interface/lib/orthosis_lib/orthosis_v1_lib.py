@@ -9,7 +9,7 @@ import zmq
 import sys, os
 # sys.path.append('../')
 from os.path import dirname, join, abspath
-sys.path.insert(0, abspath(join(dirname(__file__), '..')))
+sys.path.insert(0, abspath(join(dirname(__file__), '../../')))
 import param.orthosis_param as param
 import param.pseudo_viz_param as param_viz
 import param.error_param as param_err
@@ -517,7 +517,8 @@ def establishZMQ():
     my_context      = zmq.Context()
     my_socket       = my_context.socket(zmq.SUB)
     my_socket.connect("tcp://"+param.zmq_server_ip)
-    my_socket.setsockopt(zmq.SUBSCRIBE, param.zmq_topic)
+    # my_socket.setsockopt(zmq.SUBSCRIBE, param.zmq_topic)
+    my_socket.subscribe("10")
 
     return my_socket
     
