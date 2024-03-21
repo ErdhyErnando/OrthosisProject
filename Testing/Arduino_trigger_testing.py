@@ -18,12 +18,12 @@ import signal
 from orthosis_interface.lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib
 
 def runTrigger():
-    trig_obj = TrigLib('/dev/ttyUSB1', 9600)
+    trig_obj = TrigLib('/dev/ttyACM0', 9600)
     setattr(trig_obj,'is_trigger_running', True)
     loop_idx = 0
     dt = 0.002
     print("Trigger Process Ready!!")
-    prev_led_state = False
+
     loop_start_time = time.perf_counter()
     signal.signal(signal.SIGINT, trig_obj.signalHandler)
     signal.signal(signal.SIGQUIT, trig_obj.signalHandler)
@@ -31,17 +31,15 @@ def runTrigger():
 
     while getattr(trig_obj, 'is_trigger_running'):
         loop_idx += 1
-        if count[0]%5 == 0:
-            if prev_led_state==False:
-                trig_obj.arduino_handle.write(b'T')
-                print("Trigger T is sent")
-                print(count[0])
-                prev_led_state=True
-            elif prev_led_state==True:
-                trig_obj.arduino_handle.write(b'F')
-                print("Trigger F is sent")
-                print(count[0])
-                prev_led_state=False
+        if count[0]%2 == 0:
+            trig_obj.arduino_handle.write(b'T')
+            print("Changing Trigger T is sent")
+            print(count[0])
+        elif count[0]%2 != 0:
+            trig_obj.arduino_handle.write(b'F')
+            print("Changing Trigger F is sent")
+            print(count[0])
+            prev_led_state=False
         
         # Ensuring const. desired loop freq
         while time.perf_counter() - loop_start_time < dt * loop_idx: # This process does not work as intended for freq higher than 500 Hz (some triggers are not sent)
