@@ -42,7 +42,7 @@ class Test:
     
 
     def decrease(self):
-        self.out2[0] = self.out2[0] + 1 
+        self.out2[0] = self.out2[0] - 1 
         time.sleep(1)
 
     
