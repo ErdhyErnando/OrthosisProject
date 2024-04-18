@@ -13,4 +13,5 @@ socket.connect("tcp://{}:{}".format(host,port))
 while True:
     messagedata = random.randrange(1,215) - 80
     socket.send(messagedata)
+    print(f"sending : {messagedata}")
     time.sleep(1)

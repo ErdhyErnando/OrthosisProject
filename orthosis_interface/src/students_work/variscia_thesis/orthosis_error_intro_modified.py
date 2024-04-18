@@ -100,20 +100,21 @@ def runButton():
             m_listener.join()
 
 
-# Not needed for now
 
-# def runZmqClient():
-#     param.is_client_running = True
-#     my_socket = orthosis_lib.establishZMQ()
-#     print("Waiting for Start Trigger!")
-#     while param.is_client_running:
-#         undecoded_msg = my_socket.recv()
-#         inp_msg[0] = int(undecoded_msg[2:])
-#         if inp_msg[0] == 1:
-#             start_time[0] = time.perf_counter()
-#         elif inp_msg[0] == 2:
-#             end_time[0] = time.perf_counter()
-#         print(f"Server msg received: {inp_msg[0]}")
+
+def runZmqClient():
+    param.is_client_running = True
+    my_socket = orthosis_lib.establishZMQ()
+    print("Waiting for Start Trigger!")
+    while param.is_client_running:
+        undecoded_msg = my_socket.recv()
+        inp_msg[0] = int(undecoded_msg[2:])
+        if inp_msg[0] == 1:
+            start_time[0] = time.perf_counter()
+        elif inp_msg[0] == 2:
+            end_time[0] = time.perf_counter()
+        print(f"Server msg received: {inp_msg[0]}")
+
 
 def mapAngle(angle):
     real_angle = 0.1*angle-90
