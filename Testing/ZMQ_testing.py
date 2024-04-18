@@ -29,8 +29,8 @@ def runZmqClient():
     my_socket = orthosis_lib.establishZMQ()
     print("Waiting for Start Trigger!")
     while param.is_client_running:
-        undecoded_msg = my_socket.recv()
-        inp_msg[0] = int(undecoded_msg[2:])
+        _, undecoded_msg = my_socket.recv_string().split(":")
+        inp_msg[0] = int(undecoded_msg)
         print(f"Server msg received: {inp_msg[0]}")
 
 
