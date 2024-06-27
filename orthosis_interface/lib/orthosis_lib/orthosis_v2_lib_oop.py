@@ -2,6 +2,8 @@ import random
 import time
 import serial
 from motor_driver.canmotorlib import CanMotorController
+import zmq
+import SharedArray as sa
 
 class OrthosisLib():
     """
@@ -437,3 +439,53 @@ class TrigLib():
         This method handles the keyboard interrupt signal and shuts down the resp. process safely.
         """
         self.safe_interrupt = True
+
+
+class FlaskZMQLib():
+    """
+    Object that connect the orthosis device to the web trough ZMQ                                           
+    """
+
+    def __init__(self,my_sa_address,my_labels,my_stop_flag_address):
+
+        self.sa_address = my_sa_address
+        self.labels = my_labels
+        self.stop_flag_address = my_stop_flag_address
+
+    def zmq_publisher(self):
+        print("pub running")
+
+        port = "5001"
+        # Creates a socket instance
+        context = zmq.Context()
+        socket = context.socket(zmq.PUB)
+        # Binds the socket to a predefined port on localhost
+        socket.bind(f"tcp://*:{port}")
+
+        stop_flag = 0
+
+        while stop_flag == 0:
+
+            data_arr = []
+            for address in self.sa_address:
+                data_arr.append(sa.attach(address))
+
+            data_string = ""
+            label_idx = 0
+            for data in data_arr :
+                data_string += self.labels[label_idx]
+                data_string += f":{data[0]}:"
+                label_idx += 1
+
+            print(data_string)
+
+            flags = sa.attach(self.stop_flag_address)
+            stop_flag = flags[0]
+            socket.send_string(data_string)
+
+        time.sleep(0.5)
+        
+        print("stop")
+
+
+
