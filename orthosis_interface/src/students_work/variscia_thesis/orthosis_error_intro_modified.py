@@ -44,6 +44,7 @@ def runOrthosis():
     disturbing[0] = False
     flag_flexion_done[0] = False
     inp_msg[0] = 1
+    stop_flag[0] = 0
     i = 0
     for i in range(len(param_err.err_sequence)):
         error_seq[i] = param_err.err_sequence[i]
@@ -56,49 +57,54 @@ def runOrthosis():
         trial_counter[0] = param.trial_count
         current_pos[0] = param.orthosis_position
         error_pos[0] = param_err.err_position
+        orth_force[0] = param.orthosis_force
+        orth_def[0] = param.orthosis_deflection
+        orth_f_off[0] = param.orthosis_f_offset
+        orth_status[0] = param.orthosis_status
+        orth_voltage[0] = param.orthosis_voltage
         if param.is_verbose and not is_write[0]:
             print(f"Trial Count: {param.trial_count}")
             print(f"Error Count: {param_err.err_count}")
             print(f"Error Seq  : {param_err.err_sequence}")
     print("done!!!")
     inp_msg[0] = 2
+    stop_flag[0] = 1
 
 
 # Old code for button
-# def runButton():
-#     button_handle   = serial.Serial(port=param.button_port_name, baudrate=param.button_baud_rate)
-#     param.is_listener_running= True
-#     print("Button Listener Ready!!")
-#     while param.is_listener_running:
-#         if button_handle.in_waiting > 0:
-#             param.button_val = button_handle.read()
-#             if param.button_val == b'\x01':
-#                 is_pressed[0] = True
-#                 print("Button Pressed!!")
-#             elif param.button_val == b'\x00':
-#                 is_pressed[0] = False
-
-
 def runButton():
-    def on_release(key):
-        if key == Key.esc:
-            print("exit run Button")
-            m_listener.stop()
-            return False   
+    button_handle   = serial.Serial(port=param.button_port_name, baudrate=param.button_baud_rate)
+    param.is_listener_running= True
+    print("Button Listener Ready!!")
+    while param.is_listener_running:
+        if button_handle.in_waiting > 0:
+            param.button_val = button_handle.read()
+            if param.button_val == b'\x01':
+                is_pressed[0] = True
+                print("Button Pressed!!")
+            elif param.button_val == b'\x00':
+                is_pressed[0] = False
 
-    def on_click(x, y, button, pressed):
-        if pressed:
-            is_pressed[0] = True
-            print("Button Pressed!!")
-        else:
-            is_pressed[0] = False
-            print("Button Released")
 
-    with KeyboardListener(on_release=on_release) as k_listener, \
-        MouseListener(on_click=on_click) as m_listener:
-            k_listener.join()
-            m_listener.join()
+# def runButton():
+#     def on_release(key):
+#         if key == Key.esc:
+#             print("exit run Button")
+#             m_listener.stop()
+#             return False   
 
+#     def on_click(x, y, button, pressed):
+#         if pressed:
+#             is_pressed[0] = True
+#             print("Button Pressed!!")
+#         else:
+#             is_pressed[0] = False
+#             print("Button Released")
+
+#     with KeyboardListener(on_release=on_release) as k_listener, \
+#         MouseListener(on_click=on_click) as m_listener:
+#             k_listener.join()
+#             m_listener.join()
 
 
 
@@ -182,6 +188,12 @@ def runLogger():
         while time.perf_counter() - loop_start_time < dt * loop_idx:
             pass
 
+def connect_flask():
+    orthosis_lib.zmqFlaskConnection(["shm://volt","shm://deflection","shm://force","shm://status",
+                                     "shm://position","shm://err_pos","shm://offset"],
+                                     ["voltage","deflection","force","status","position","error pos",
+                                      "offset"],"shm://stop")
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser("Custom Error: ")
@@ -247,6 +259,12 @@ if __name__ == "__main__":
         sa.delete("shm://position")
         sa.delete("shm://err_pos")
         sa.delete("shm://err_seq")
+        sa.delete("shm://volt")
+        sa.delete("shm://deflection")
+        sa.delete("shm://force")
+        sa.delete("shm://status")
+        sa.delete("shm://offset")
+        sa.delete("shm://stop")
 
     # Creating SharedArrays
     inp_msg             = sa.create("shm://test",1)
@@ -259,10 +277,15 @@ if __name__ == "__main__":
     flag_flexion_done   = sa.create("shm://flex",1)
     disturbing          = sa.create("shm://dist",1)
     trial_counter       = sa.create("shm://trialCount",1)
+    error_seq           = sa.create("shm://err_seq",param_err.num)
+    orth_voltage        = sa.create("shm://volt",1)
+    orth_def            = sa.create("shm://deflection",1)
+    orth_force          = sa.create("shm://force",1)
+    orth_status         = sa.create("shm://status",1)
     current_pos         = sa.create("shm://position",1)
     error_pos           = sa.create("shm://err_pos",1)
-    error_seq           = sa.create("shm://err_seq",param_err.num)
-
+    orth_f_off          = sa.create("shm://offset",1)
+    stop_flag           = sa.create("shm://stop",1)
     
 
     # Process 1 - Orthosis process
@@ -277,8 +300,12 @@ if __name__ == "__main__":
     # Process 4 - Data logging process
     pr_logger      = mp.Process(target=runLogger)
 
+    # Process 5 - connection to flask backend
+    pr_flaskConn   = mp.Process(target=connect_flask)
+
     # Starting the processes
     pr_orthosis.start()
     pr_button.start()
     # pr_zmq_client.start()
     pr_logger.start()
+    pr_flaskConn.start()

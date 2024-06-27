@@ -5,6 +5,7 @@
 import random
 import time
 import zmq
+import SharedArray as sa
 # Appending the relative path of the root folder
 import sys, os
 # sys.path.append('../')
@@ -521,4 +522,54 @@ def establishZMQ():
     my_socket.subscribe("10")
 
     return my_socket
+
+
+
+def zmqFlaskConnection(sa_address, labels, stop_flag_add):
+    """
+    function to publish data from orthosis device to flask.
+    Input : 
+    - array of SharedArray address from whom the will be retrieved
+    - array of label correspond to the data from sharedArray
+    - addres of sharedArray stop flag
+
+    output : None                                                   
+    """
+
+
+    print("pub running")
+
+    port = "5001"
+    # Creates a socket instance
+    context = zmq.Context()
+    socket = context.socket(zmq.PUB)
+    # Binds the socket to a predefined port on localhost
+    socket.bind(f"tcp://*:{port}")
+
+    stop_flag = 0
+
+    while stop_flag == 0:
+
+        data_arr = []
+        for address in sa_address:
+            data_arr.append(sa.attach(address))
+
+        data_string = ""
+        label_idx = 0
+        for data in data_arr :
+            data_string += labels[label_idx]
+            data_string += f":{data[0]}:"
+            label_idx += 1
+
+        print(data_string)
+
+        flags = sa.attach(stop_flag_add)
+        stop_flag = flags[0]
+        socket.send_string(data_string)
+
+        time.sleep(0.1)
+
+    time.sleep(0.5)
     
+    print("stop")
+   

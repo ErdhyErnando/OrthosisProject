@@ -482,6 +482,7 @@ class FlaskZMQLib():
             flags = sa.attach(self.stop_flag_address)
             stop_flag = flags[0]
             socket.send_string(data_string)
+            time.sleep(0.1)
 
         time.sleep(0.5)
         
