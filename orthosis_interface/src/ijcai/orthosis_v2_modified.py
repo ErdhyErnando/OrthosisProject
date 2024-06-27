@@ -24,7 +24,7 @@ import signal
 # Uncomment the following if you have pip installed the orthosis_lib
 #from orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib
 # Uncomment the following otherwise
-from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib
+from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib,FlaskZMQLib
 
 def runOrthosis():
     setattr(orthosis_obj,'is_orthosis_running',True)
@@ -40,7 +40,7 @@ def runOrthosis():
     pos,_,_ = orthosis_obj.orthosis_handle.set_zero_position()
     setattr(orthosis_obj,'orthosis_pose_desired', pos)
     print("Orthosis Process Ready!!")
-    
+    stop_flag[0] = 0
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
@@ -58,51 +58,55 @@ def runOrthosis():
             print("Exiting the orthosis process safely!!")
             orthosis_obj.orthosis_handle.disable_motor()
             break
+        orth_pos[0] = orthosis_obj.orthosis_position
+        orth_des_pos[0] = orthosis_obj.orthosis_pose_desired
+        orth_force[0] = orthosis_obj.orthosis_force
     # Stopping the experiment
     orthosis_obj.orthosis_handle.disable_motor()
+    stop_flag[0] = 1
 
-
-# def runButton():
-#     button_obj = ButtonLib('/dev/ttyUSB0',9600)
-#     setattr(button_obj,'is_listener_running', True)
-#     is_pressed[0] = 0.0
-#     signal.signal(signal.SIGINT, button_obj.signalHandler)
-#     signal.signal(signal.SIGQUIT, button_obj.signalHandler)
-#     signal.signal(signal.SIGTSTP, button_obj.signalHandler)
-#     print("Button Listener Ready!!")
-#     while getattr(button_obj,'is_listener_running'):
-#         if button_obj.button_handle.in_waiting > 0:
-#             button_val = button_obj.button_handle.read().decode("utf-8")
-#             setattr(button_obj,'button_val',button_val)
-#             if getattr(button_obj,'button_val') == '-':
-#                 is_pressed[0] = True
-#                 print("Button Pressed!!")
-#             elif getattr(button_obj,'button_val') == ',':
-#                 is_pressed[0] = False
-#         # Safe Keyboard Interrupt
-#         if getattr(button_obj,'safe_interrupt'):
-#             print("Exiting Button process safely!")
-#             break
 
 def runButton():
-    def on_release(key):
-        if key == Key.esc:
-            print("exit run Button")
-            m_listener.stop()
-            return False   
+    button_obj = ButtonLib('/dev/ttyUSB0',9600)
+    setattr(button_obj,'is_listener_running', True)
+    is_pressed[0] = 0.0
+    signal.signal(signal.SIGINT, button_obj.signalHandler)
+    signal.signal(signal.SIGQUIT, button_obj.signalHandler)
+    signal.signal(signal.SIGTSTP, button_obj.signalHandler)
+    print("Button Listener Ready!!")
+    while getattr(button_obj,'is_listener_running'):
+        if button_obj.button_handle.in_waiting > 0:
+            button_val = button_obj.button_handle.read().decode("utf-8")
+            setattr(button_obj,'button_val',button_val)
+            if getattr(button_obj,'button_val') == '-':
+                is_pressed[0] = True
+                print("Button Pressed!!")
+            elif getattr(button_obj,'button_val') == ',':
+                is_pressed[0] = False
+        # Safe Keyboard Interrupt
+        if getattr(button_obj,'safe_interrupt'):
+            print("Exiting Button process safely!")
+            break
 
-    def on_click(x, y, button, pressed):
-        if pressed:
-            is_pressed[0] = True
-            print("Button Pressed!!")
-        else:
-            is_pressed[0] = False
-            print("Button Released")
+# def runButton():
+#     def on_release(key):
+#         if key == Key.esc:
+#             print("exit run Button")
+#             m_listener.stop()
+#             return False   
 
-    with KeyboardListener(on_release=on_release) as k_listener, \
-        MouseListener(on_click=on_click) as m_listener:
-            k_listener.join()
-            m_listener.join()
+#     def on_click(x, y, button, pressed):
+#         if pressed:
+#             is_pressed[0] = True
+#             print("Button Pressed!!")
+#         else:
+#             is_pressed[0] = False
+#             print("Button Released")
+
+#     with KeyboardListener(on_release=on_release) as k_listener, \
+#         MouseListener(on_click=on_click) as m_listener:
+#             k_listener.join()
+#             m_listener.join()
 
 def runTrigger():
     trig_obj = TrigLib('/dev/ttyUSB1', 9600)
@@ -159,6 +163,16 @@ def runTrigger():
             break
         
 
+def FlaskInterface():
+    flask_interface = FlaskZMQLib(["shm://force","shm://pos","shm://des_pos"],
+                                  ["force","position","des_position"],"shm://stop")
+    
+    flask_interface.zmq_publisher()
+
+
+
+
+
 if __name__ == "__main__":
 
     orthosis_obj = OrthosisLib("can0", 0x01, "AK80_6_V1p1", 0.5)
@@ -194,6 +208,11 @@ if __name__ == "__main__":
         sa.delete("shm://dist")
         sa.delete("shm://flst")
         sa.delete("shm://notr")
+        sa.delete("shm://force")
+        sa.delete("shm://pos")
+        sa.delete("shm://des_pos")
+        sa.delete("shm://stop")
+        
 
     # Creating SharedArrays
     is_pressed          = sa.create("shm://button",1)
@@ -201,6 +220,10 @@ if __name__ == "__main__":
     disturbing          = sa.create("shm://dist",1)
     flag_flexion_started= sa.create("shm://flst",1)
     flag_normal_trigger = sa.create("shm://notr",1)
+    orth_force = sa.create("shm://force",1)
+    orth_pos = sa.create("shm://pos",1)
+    orth_des_pos = sa.create("shm://des_pos",1)
+    stop_flag = sa.create("shm://stop",1)
 
     # Process 1 - Orthosis process
     pr_orthosis    = mp.Process(target=runOrthosis)
@@ -211,7 +234,11 @@ if __name__ == "__main__":
     # Process 3 - Trigger generating process
     pr_trigger     = mp.Process(target=runTrigger)
 
+    #process 4 - Connect to Flask
+    pr_flaskInterface = mp.Process(target=FlaskInterface)
+
     # Starting the processes
     pr_orthosis.start()
     pr_button.start()
     # pr_trigger.start()
+    pr_flaskInterface.start()
