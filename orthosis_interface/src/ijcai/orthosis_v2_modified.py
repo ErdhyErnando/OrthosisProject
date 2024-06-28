@@ -220,10 +220,10 @@ if __name__ == "__main__":
     disturbing          = sa.create("shm://dist",1)
     flag_flexion_started= sa.create("shm://flst",1)
     flag_normal_trigger = sa.create("shm://notr",1)
-    orth_force = sa.create("shm://force",1)
-    orth_pos = sa.create("shm://pos",1)
-    orth_des_pos = sa.create("shm://des_pos",1)
-    stop_flag = sa.create("shm://stop",1)
+    orth_force          = sa.create("shm://force",1)
+    orth_pos            = sa.create("shm://pos",1)
+    orth_des_pos        = sa.create("shm://des_pos",1)
+    stop_flag           = sa.create("shm://stop",1)
 
     # Process 1 - Orthosis process
     pr_orthosis    = mp.Process(target=runOrthosis)
