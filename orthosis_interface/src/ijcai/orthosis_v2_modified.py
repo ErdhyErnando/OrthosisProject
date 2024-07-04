@@ -59,6 +59,9 @@ def runOrthosis():
             print(f"Trial Count     : {getattr(orthosis_obj,'trial_count')}")
             print(f"Error Count     : {getattr(orthosis_obj,'err_count')}")
             print(f"Error Seq       : {getattr(orthosis_obj,'err_sequence')}")
+            print(f"orthosis pos    : {getattr(orthosis_obj,'orthosis_position')}")
+            print(f"orthosis pos des: {getattr(orthosis_obj,'orthosis_pose_desired')}")
+            print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
         # Safe KeyboardInterrupt
         if getattr(orthosis_obj,'safe_interrupt'):
             print("Exiting the orthosis process safely!!")
@@ -209,7 +212,7 @@ if __name__ == "__main__":
     if args['thr_ext'] is not None:
         setattr(orthosis_obj, 'eff_thresh_ext', float(args['thr_ext']))
     if args['num_trial'] is not None:
-        setattr(orthosis_obj, 'n_trials', float(args['num_trial']))
+        setattr(orthosis_obj, 'n_trials', int(args['num_trial']))
     
 
     #Deleting old SharedArrays
@@ -241,6 +244,6 @@ if __name__ == "__main__":
 
     # Starting the processes
     pr_orthosis.start()
-    pr_button.start()
+    # pr_button.start()
     # pr_trigger.start()
 

@@ -469,7 +469,7 @@ class FlaskZMQPub():
             print(data_string)
             self.mySocket.send_string(data_string)
 
-            time.sleep(0.1)
+            time.sleep(0.02)
 
         else :
             time.sleep(0.5)
