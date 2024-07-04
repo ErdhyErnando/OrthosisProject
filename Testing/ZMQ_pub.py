@@ -10,6 +10,18 @@ Input : array of SharedArray address from whom the will be retrieved
 output : None                                                   
 """
 
+#!/usr/bin/env python3
+import zmq
+import SharedArray as sa
+import time
+
+
+"""
+function to publish data from orthosis device.
+Input : array of SharedArray address from whom the will be retrieved
+output : None                                                   
+"""
+
 def zmq_publisher(sa_address, labels, stop_flag_add):
     print("pub running")
 
@@ -40,12 +52,10 @@ def zmq_publisher(sa_address, labels, stop_flag_add):
         flags = sa.attach(stop_flag_add)
         stop_flag = flags[0]
         socket.send_string(data_string)
-
         time.sleep(0.1)
 
-    time.sleep(0.5)
-    
-    print("stop")
 
+    time.sleep(0.5)
+    socket.send_string("STOP")
 
 

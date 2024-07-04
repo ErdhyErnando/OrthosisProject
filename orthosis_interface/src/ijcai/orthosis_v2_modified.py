@@ -24,7 +24,7 @@ import signal
 # Uncomment the following if you have pip installed the orthosis_lib
 #from orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib
 # Uncomment the following otherwise
-from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib,FlaskZMQLib
+from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib, FlaskZMQPub
 
 def runOrthosis():
     setattr(orthosis_obj,'is_orthosis_running',True)
@@ -40,12 +40,14 @@ def runOrthosis():
     pos,_,_ = orthosis_obj.orthosis_handle.set_zero_position()
     setattr(orthosis_obj,'orthosis_pose_desired', pos)
     print("Orthosis Process Ready!!")
-    stop_flag[0] = 0
+    stop_flag = False
+    zmqPub = FlaskZMQPub()
+    myLabel = ["orth_pos","orth_des_pos","orth_force"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
             
-    while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials')+2:# and move_to_start_pos: # added start pos here 
+    while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
         orthosis_obj.readValues()
         orthosis_obj.runExperimentRandomError(flag_flexion_done, disturbing, flag_flexion_started, flag_normal_trigger)
         # setattr(orthosis_obj,'is_verbose', True)
@@ -58,12 +60,12 @@ def runOrthosis():
             print("Exiting the orthosis process safely!!")
             orthosis_obj.orthosis_handle.disable_motor()
             break
-        orth_pos[0] = orthosis_obj.orthosis_position
-        orth_des_pos[0] = orthosis_obj.orthosis_pose_desired
-        orth_force[0] = orthosis_obj.orthosis_force
+        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force]
+        zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
     # Stopping the experiment
     orthosis_obj.orthosis_handle.disable_motor()
-    stop_flag[0] = 1
+    stop_flag = True
+    zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
 
 
 def runButton():
@@ -163,15 +165,6 @@ def runTrigger():
             break
         
 
-def FlaskInterface():
-    flask_interface = FlaskZMQLib(["shm://force","shm://pos","shm://des_pos"],
-                                  ["force","position","des_position"],"shm://stop")
-    
-    flask_interface.zmq_publisher()
-
-
-
-
 
 if __name__ == "__main__":
 
@@ -208,10 +201,7 @@ if __name__ == "__main__":
         sa.delete("shm://dist")
         sa.delete("shm://flst")
         sa.delete("shm://notr")
-        sa.delete("shm://force")
-        sa.delete("shm://pos")
-        sa.delete("shm://des_pos")
-        sa.delete("shm://stop")
+
         
 
     # Creating SharedArrays
@@ -220,10 +210,7 @@ if __name__ == "__main__":
     disturbing          = sa.create("shm://dist",1)
     flag_flexion_started= sa.create("shm://flst",1)
     flag_normal_trigger = sa.create("shm://notr",1)
-    orth_force          = sa.create("shm://force",1)
-    orth_pos            = sa.create("shm://pos",1)
-    orth_des_pos        = sa.create("shm://des_pos",1)
-    stop_flag           = sa.create("shm://stop",1)
+ 
 
     # Process 1 - Orthosis process
     pr_orthosis    = mp.Process(target=runOrthosis)
@@ -234,11 +221,8 @@ if __name__ == "__main__":
     # Process 3 - Trigger generating process
     pr_trigger     = mp.Process(target=runTrigger)
 
-    #process 4 - Connect to Flask
-    pr_flaskInterface = mp.Process(target=FlaskInterface)
-
     # Starting the processes
     pr_orthosis.start()
     pr_button.start()
     # pr_trigger.start()
-    pr_flaskInterface.start()
+

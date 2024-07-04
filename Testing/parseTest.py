@@ -9,6 +9,7 @@ if __name__ == "__main__":
     is_verbose = False
     f_sensitivity = 0.1
     n_trials = 1
+    prop = 0.0
     parser = argparse.ArgumentParser("Custom Error: ")
     parser.add_argument('-n','--n_errors', help='No of errors to introduce')
     parser.add_argument('-d','--duration', help='Duration of error in microseconds')
@@ -16,6 +17,7 @@ if __name__ == "__main__":
     parser.add_argument('-v','--verbose', help='Bool to decide if you want to print on console')
     parser.add_argument('-s','--sensitivity', help='Force Sensitivity')
     parser.add_argument('-nt','--n_trial', help='Number of Trials')
+    parser.add_argument('-p','--probability', help='random probability')
 
     args = vars(parser.parse_args())
     if args['n_errors'] is not None:
@@ -30,5 +32,7 @@ if __name__ == "__main__":
         f_sensitivity = float(args['sensitivity'])
     if args['n_trial'] is not None:
         n_trials = int(args['n_trial'])
+    if args['probability'] is not None:
+        prop = float(args['probability'])
 
-    print(f"{num}-{duration}-{filename}-{is_verbose}-{f_sensitivity}-{n_trials}")
+    print(f"{num}-{duration}-{filename}-{is_verbose}-{f_sensitivity}-{n_trials}-{prop}")
