@@ -53,7 +53,13 @@ def runOrthosis():
     myLabels = ["orth_pos","err_pos","orth_force","orth_def","orth_f_offset","orth_status","orth_voltage"]
     print("Orthosis Process Ready!!")
     trial_counter[0] = 0
+
+    # Initialize a list to store execution times
+    execution_times = []
+
     while param.trial_count < param.n_trials:
+        start_time = time.time()  # Record the start time
+
         orthosis_lib.readValues(orthosis_handle)
         orthosis_lib.runExperimentRandomError(orthosis_handle, flag_flexion_done, disturbing)
         current_pos[0] = param.orthosis_position
@@ -66,9 +72,20 @@ def runOrthosis():
             print(f"Trial Count: {param.trial_count}")
             print(f"Error Count: {param_err.err_count}")
             print(f"Error Seq  : {param_err.err_sequence}")
+        
+        end_time = time.time()  # Record the end time
+        execution_time = end_time - start_time  # Calculate the execution time for this iteration
+        execution_times.append(execution_time)  # Store the execution time
+
+
     myStop_flag = True
     orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
+
+    # Calculate the average execution time
+    average_execution_time = sum(execution_times) / len(execution_times) if execution_times else 0
     print("done!!!")
+    print(f"Average Execution Time: {average_execution_time} seconds")
+
     inp_msg[0] = 2
  
 

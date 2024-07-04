@@ -46,8 +46,14 @@ def runOrthosis():
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
+
+    # Initialize a list to store execution times
+    execution_times = []
             
     while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
+
+        start_time = time.time()  # Record the start time
+
         orthosis_obj.readValues()
         orthosis_obj.runExperimentRandomError(flag_flexion_done, disturbing, flag_flexion_started, flag_normal_trigger)
         # setattr(orthosis_obj,'is_verbose', True)
@@ -62,10 +68,24 @@ def runOrthosis():
             break
         myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force]
         zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
+
+
+        end_time = time.time()  # Record the end time
+        execution_time = end_time - start_time  # Calculate the execution time for this iteration
+        execution_times.append(execution_time)  # Store the execution time
+
+
     # Stopping the experiment
     orthosis_obj.orthosis_handle.disable_motor()
     stop_flag = True
     zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
+
+    if execution_times:
+        average_execution_time = sum(execution_times) / len(execution_times)
+    else:
+        average_execution_time = 0
+    
+    print(f"Average Execution Time: {average_execution_time} seconds")
 
 
 def runButton():
