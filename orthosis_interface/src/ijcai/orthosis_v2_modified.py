@@ -40,7 +40,7 @@ def runOrthosis():
     print("Orthosis Process Ready!!")
     stop_flag = False
     zmqPub = FlaskZMQPub()
-    myLabel = ["orth_pos","orth_des_pos","orth_force"]
+    myLabel = ["orth_pos","orth_des_pos","orth_force","disturb_intro"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
@@ -67,7 +67,11 @@ def runOrthosis():
             print("Exiting the orthosis process safely!!")
             orthosis_obj.orthosis_handle.disable_motor()
             break
-        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force]
+        disturb = 0
+        if orthosis_obj.is_disturbing == True:
+            disturb = 100
+
+        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb]
         zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
 
 
@@ -87,6 +91,12 @@ def runOrthosis():
         average_execution_time = 0
     
     print(f"Average Execution Time: {average_execution_time} seconds")
+    time.sleep(3.0)
+    sa.delete("shm://button")
+    sa.delete("shm://flex")
+    sa.delete("shm://dist")
+    sa.delete("shm://flst")
+    sa.delete("shm://notr")
 
 
 def runButton():
