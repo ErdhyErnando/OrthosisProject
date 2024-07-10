@@ -50,7 +50,7 @@ def runOrthosis():
         error_seq[i] = param_err.err_sequence[i]
     
     pubSocket = orthosis_lib.EstablishZMQPub()
-    myLabels = ["orth_pos","err_pos","orth_force","orth_def","orth_f_offset","orth_status","orth_voltage"]
+    myLabels = ["orth_pos","err_pos","orth_force","orth_def","orth_f_offset","orth_status","orth_voltage","is_error_introduced"]
     print("Orthosis Process Ready!!")
     trial_counter[0] = 0
 
@@ -65,8 +65,11 @@ def runOrthosis():
         current_pos[0] = param.orthosis_position
         error_pos[0] = param_err.err_position
         trial_counter[0] = param.trial_count
+        intro_error = 0.0
+        if param_err.is_err_introduced == True:
+            intro_error = 100.0
         myData = [param.orthosis_position,param_err.err_position,param.orthosis_force,
-                  param.orthosis_deflection,param.orthosis_f_offset,param.orthosis_status,param.orthosis_voltage]
+                  param.orthosis_deflection,param.orthosis_f_offset,param.orthosis_status,param.orthosis_voltage,intro_error]
         orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
         if param.is_verbose and not is_write[0]:
             print(f"Trial Count: {param.trial_count}")
@@ -87,6 +90,19 @@ def runOrthosis():
     print(f"Average Execution Time: {average_execution_time} seconds")
 
     inp_msg[0] = 2
+
+    time.sleep(4.0)
+    sa.delete("shm://test")
+    sa.delete("shm://wr")
+    sa.delete("shm://button")
+    sa.delete("shm://flex")
+    sa.delete("shm://dist")
+    sa.delete("shm://start")
+    sa.delete("shm://end")
+    sa.delete("shm://trialCount")
+    sa.delete("shm://position")
+    sa.delete("shm://err_pos")
+    sa.delete("shm://err_seq")
  
 
 
