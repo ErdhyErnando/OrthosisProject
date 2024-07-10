@@ -62,6 +62,7 @@ def runOrthosis():
             print(f"orthosis pos    : {getattr(orthosis_obj,'orthosis_position')}")
             print(f"orthosis pos des: {getattr(orthosis_obj,'orthosis_pose_desired')}")
             print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
+            print(f"is error        : {orthosis_obj.is_disturbing}")
         # Safe KeyboardInterrupt
         if getattr(orthosis_obj,'safe_interrupt'):
             print("Exiting the orthosis process safely!!")
@@ -226,12 +227,12 @@ if __name__ == "__main__":
     
 
     #Deleting old SharedArrays
-    if len(sa.list()) != 0:
-        sa.delete("shm://button")
-        sa.delete("shm://flex")
-        sa.delete("shm://dist")
-        sa.delete("shm://flst")
-        sa.delete("shm://notr")
+    # if len(sa.list()) != 0:
+    #     sa.delete("shm://button")
+    #     sa.delete("shm://flex")
+    #     sa.delete("shm://dist")
+    #     sa.delete("shm://flst")
+    #     sa.delete("shm://notr")
 
         
 
