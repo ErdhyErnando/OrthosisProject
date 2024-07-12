@@ -47,12 +47,11 @@ def runOrthosis():
 
     # Initialize a list to store execution times
     execution_times = []
-    disturb = 0
-    prev_trial = -1        
+
     while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
 
         start_time = time.time()  # Record the start time
-
+        disturb = 0
         orthosis_obj.readValues()
         orthosis_obj.runExperimentRandomError(flag_flexion_done, disturbing, flag_flexion_started, flag_normal_trigger)
         # setattr(orthosis_obj,'is_verbose', True)
@@ -63,23 +62,15 @@ def runOrthosis():
             print(f"orthosis pos    : {getattr(orthosis_obj,'orthosis_position')}")
             print(f"orthosis pos des: {getattr(orthosis_obj,'orthosis_pose_desired')}")
             print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
-            print(f"is error        : {orthosis_obj.is_disturbing} {disturb}")
+            print(f"is error        : {disturbing[0]} {disturb}")
         # Safe KeyboardInterrupt
         if getattr(orthosis_obj,'safe_interrupt'):
             print("Exiting the orthosis process safely!!")
             orthosis_obj.orthosis_handle.disable_motor()
             break
 
-        if orthosis_obj.is_disturbing == True:
+        if disturbing[0] == True:
             disturb = 100.0
-            prev_trial = orthosis_obj.trial_count
-
-        elif prev_trial == orthosis_obj.trial_count :
-            disturb = 100.0
-
-        else :
-            prev_trial = -1
-            disturb = 0.0
 
         myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb]
         zmqPub.zmq_publish(myDatas,myLabel,stop_flag)

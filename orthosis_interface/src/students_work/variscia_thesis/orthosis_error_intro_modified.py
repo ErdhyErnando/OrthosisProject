@@ -17,9 +17,6 @@ import multiprocessing as mp
 import time
 import datetime
 import SharedArray as sa
-from pynput.keyboard import Listener  as KeyboardListener
-from pynput.mouse    import Listener  as MouseListener
-from pynput.keyboard import Key
 # Appending the relative path of the root folder
 import sys, os
 # sys.path.append('../../')
