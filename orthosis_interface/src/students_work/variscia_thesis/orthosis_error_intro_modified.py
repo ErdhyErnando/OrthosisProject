@@ -25,7 +25,7 @@ import param.error_param as param_err
 # Uncomment the following if you have pip installed the orthosis_lib
 # import orthosis_lib.orthosis_v1_lib as orthosis_lib
 # Uncomment the following otherwise
-import lib.orthosis_v1_lib_modified as orthosis_lib
+import lib.orthosis_lib.orthosis_v1_lib_modified as orthosis_lib
 
 
 #Function to run the orthosis
