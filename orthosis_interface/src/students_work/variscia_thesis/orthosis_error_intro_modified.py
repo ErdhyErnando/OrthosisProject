@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
 ############# NOTE #############
-# This script is the multiprocessing script which appends all the values to the queue 
-# and uses SharedArrays to share memory across processes.
-############# NOTE #############
-# This script is used for testing purpose only for student project Hanif M. Santosa, Erdhy E. Davis
-# Zaki Jamalulail, Andrew B. Nugroho. The button function is modified so that it can utilize mouse and keyboard
-# and also remove the ZQT function and modify the runOrthosis function to be able to be run independetly without
-# other PC/Laptop.
+#This script is modification of orthosis_error_intro_mp_variscia.py
+#Several additional lines are added to communicate and send data from
+#Orthosis device to the JS WebApp.
 ###############################
 
 
@@ -32,7 +28,7 @@ import param.error_param as param_err
 import lib.orthosis_v1_lib_modified as orthosis_lib
 
 
-
+#Function to run the orthosis
 def runOrthosis():
     orthosis_handle = serial.Serial(port=param.orthosis_port_name, baudrate=param.orthosis_baud_rate)
     param.is_orthosis_running=True
@@ -46,6 +42,7 @@ def runOrthosis():
     for i in range(len(param_err.err_sequence)):
         error_seq[i] = param_err.err_sequence[i]
     
+    #establishing ZMQ Publisher to publish data to the JS WebAPP
     pubSocket = orthosis_lib.EstablishZMQPub()
     myLabels = ["orth_pos","err_pos","orth_force","orth_def","orth_f_offset","orth_status","orth_voltage","is_error_introduced"]
     print("Orthosis Process Ready!!")
@@ -67,6 +64,8 @@ def runOrthosis():
             intro_error = 100.0
         myData = [param.orthosis_position,param_err.err_position,param.orthosis_force,
                   param.orthosis_deflection,param.orthosis_f_offset,param.orthosis_status,param.orthosis_voltage,intro_error]
+        
+        #Publish data to JS WebAPP
         orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
         if param.is_verbose and not is_write[0]:
             print(f"Trial Count: {param.trial_count}")
@@ -89,6 +88,7 @@ def runOrthosis():
     inp_msg[0] = 2
 
     time.sleep(4.0)
+    #Delete the old shared array
     sa.delete("shm://test")
     sa.delete("shm://wr")
     sa.delete("shm://button")
@@ -103,7 +103,7 @@ def runOrthosis():
  
 
 
-# Old code for button
+#Function to read button value
 def runButton():
     button_handle   = serial.Serial(port=param.button_port_name, baudrate=param.button_baud_rate)
     param.is_listener_running= True
@@ -118,6 +118,7 @@ def runButton():
                 is_pressed[0] = False
 
 
+#Function to replace the button with keyboard and mouse
 # def runButton():
 #     def on_release(key):
 #         if key == Key.esc:
@@ -139,7 +140,7 @@ def runButton():
 #             m_listener.join()
 
 
-
+#Function to run ZMQ Cleint to communicate with second device
 def runZmqClient():
     param.is_client_running = True
     my_socket = orthosis_lib.establishZMQ()
@@ -153,11 +154,13 @@ def runZmqClient():
             end_time[0] = time.perf_counter()
         print(f"Server msg received: {inp_msg[0]}")
 
-
+#Function to map the angle from the sensor reading data into degree
 def mapAngle(angle):
     real_angle = 0.1*angle-90
     return real_angle
 
+
+#Function to run Logger
 def runLogger():
     param.is_logger_running = True
     # orthosis_lib.headerFile(error_seq)
@@ -273,19 +276,19 @@ if __name__ == "__main__":
     # Queue object to append all values to log 
     data_list_q     = mp.Queue()
 
-    # Deleting old SharedArrays
-    if len(sa.list()) != 0:
-        sa.delete("shm://test")
-        sa.delete("shm://wr")
-        sa.delete("shm://button")
-        sa.delete("shm://flex")
-        sa.delete("shm://dist")
-        sa.delete("shm://start")
-        sa.delete("shm://end")
-        sa.delete("shm://trialCount")
-        sa.delete("shm://position")
-        sa.delete("shm://err_pos")
-        sa.delete("shm://err_seq")
+    # # Deleting old SharedArrays
+    # if len(sa.list()) != 0:
+    #     sa.delete("shm://test")
+    #     sa.delete("shm://wr")
+    #     sa.delete("shm://button")
+    #     sa.delete("shm://flex")
+    #     sa.delete("shm://dist")
+    #     sa.delete("shm://start")
+    #     sa.delete("shm://end")
+    #     sa.delete("shm://trialCount")
+    #     sa.delete("shm://position")
+    #     sa.delete("shm://err_pos")
+    #     sa.delete("shm://err_seq")
 
 
     # Creating SharedArrays

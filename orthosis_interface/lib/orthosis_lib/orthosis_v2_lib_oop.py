@@ -441,12 +441,16 @@ class TrigLib():
         self.safe_interrupt = True
 
 
+
 class FlaskZMQPub():
     """
     Object that connect the orthosis device to the web trough ZMQ                                           
     """
 
     def __init__(self):
+        """
+        Initialize ZMQ Publisher connection
+        """
         
         port = "5001"
         # Creates a socket instance
@@ -455,7 +459,15 @@ class FlaskZMQPub():
         # Binds the socket to a predefined port on localhost
         self.mySocket.bind(f"tcp://*:{port}")
 
+
     def zmq_publish(self,datas,labels,StopFlag):
+        """
+        Publish data to the JS WebAPP
+        input :
+            Arr Datas (Float)   : Array of data that will be sent
+            Arr Labels (String) : Array of label of the data (the arrangement of the label must be correspond to the arrangement of data)
+            StopFLag (Bool)     : Flag to indicate that the data stream already stopped   
+        """
         
         if StopFlag == False:
 

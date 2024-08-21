@@ -2,11 +2,11 @@
 
 ############# NOTE #############
 # This script is the main file for the orthosis experiment for the IJCAI'23 competition
+#Has been modified to be able to communicate with the JS WebAPP
 # Command to setup motor CAN interface : sudo ip link set can0 up type can bitrate 1000000
 ################################
 
 import argparse
-import serial
 import multiprocessing as mp
 import time
 import SharedArray as sa
@@ -24,6 +24,8 @@ import signal
 # Uncomment the following otherwise
 from lib.orthosis_lib.orthosis_v2_lib_oop import OrthosisLib, ButtonLib, TrigLib, FlaskZMQPub
 
+
+#Function to run the Orthosis Device
 def runOrthosis():
     setattr(orthosis_obj,'is_orthosis_running',True)
     orthosis_obj.generateErrorSequence()
@@ -73,6 +75,8 @@ def runOrthosis():
             disturb = 100.0
 
         myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb]
+        
+        #publish data to JS backend
         zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
 
 
@@ -86,6 +90,7 @@ def runOrthosis():
     stop_flag = True
     zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
 
+    #Calculating Execution time (For experiment purpose)
     if execution_times:
         average_execution_time = sum(execution_times) / len(execution_times)
     else:
@@ -93,6 +98,8 @@ def runOrthosis():
     
     print(f"Average Execution Time: {average_execution_time} seconds")
     time.sleep(3.0)
+
+    #Delete old Shared Array
     sa.delete("shm://button")
     sa.delete("shm://flex")
     sa.delete("shm://dist")
@@ -100,6 +107,7 @@ def runOrthosis():
     sa.delete("shm://notr")
 
 
+#Function to run button
 def runButton():
     button_obj = ButtonLib('/dev/ttyUSB0',9600)
     setattr(button_obj,'is_listener_running', True)
@@ -122,6 +130,8 @@ def runButton():
             print("Exiting Button process safely!")
             break
 
+
+#To replace button function using Keyboard and Mouse
 # def runButton():
 #     def on_release(key):
 #         if key == Key.esc:
@@ -142,6 +152,8 @@ def runButton():
 #             k_listener.join()
 #             m_listener.join()
 
+
+#Running trigger with Arduino
 def runTrigger():
     trig_obj = TrigLib('/dev/ttyUSB1', 9600)
     setattr(trig_obj,'is_trigger_running', True)
@@ -198,6 +210,7 @@ def runTrigger():
         
 
 
+
 if __name__ == "__main__":
 
     orthosis_obj = OrthosisLib("can0", 0x01, "AK80_6_V1p1", 0.5)
@@ -226,7 +239,7 @@ if __name__ == "__main__":
         setattr(orthosis_obj, 'n_trials', int(args['num_trial']))
     
 
-    #Deleting old SharedArrays
+    #Deleting old SharedArrays (Already done in runOrthosis Function)
     # if len(sa.list()) != 0:
     #     sa.delete("shm://button")
     #     sa.delete("shm://flex")
@@ -235,7 +248,6 @@ if __name__ == "__main__":
     #     sa.delete("shm://notr")
 
         
-
     # Creating SharedArrays
     is_pressed          = sa.create("shm://button",1)
     flag_flexion_done   = sa.create("shm://flex",1)

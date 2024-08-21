@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-## This library contains all the methods being used for the orthosis force control thread ##
+## This library is the modification of orthosis_v1_lib.py with additional function
+## to communicate with JS WebAPP via ZMQ.
 
 import random
 import time
@@ -527,7 +528,7 @@ def establishZMQ():
 
 def EstablishZMQPub():
     """
-    Function to establish a ZMQ publisher
+    Function to establish a ZMQ publisher (connection to WebAPP purpose)
     input : None
 
     Output : socket of ZMQ
@@ -544,7 +545,7 @@ def EstablishZMQPub():
 
 def ZMQPublish(datas, labels, stop_flag,mySocket):
     """
-    function to publish data from orthosis device to flask.
+    function to publish data from orthosis device to WebApp.
     Input : 
     - array of data that will be sent
     - array of label correspond to the data 
