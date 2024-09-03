@@ -38,13 +38,14 @@ def runOrthosis():
     flag_flexion_done[0] = False
     inp_msg[0] = 1
     myStop_flag = False
+    trial_prev = param.trial_count
     i = 0
     for i in range(len(param_err.err_sequence)):
         error_seq[i] = param_err.err_sequence[i]
     
     #establishing ZMQ Publisher to publish data to the JS WebAPP
     pubSocket = orthosis_lib.EstablishZMQPub()
-    myLabels = ["orth_pos","err_pos","orth_force","orth_def","orth_f_offset","orth_status","orth_voltage","is_error_introduced"]
+    myLabels = ["orth_pos","err_pos","orth_force","orth_def","is_error_introduced","new_trial"]
     print("Orthosis Process Ready!!")
     trial_counter[0] = 0
 
@@ -60,10 +61,20 @@ def runOrthosis():
         error_pos[0] = param_err.err_position
         trial_counter[0] = param.trial_count
         intro_error = 0.0
+        err_pos = None
+        new_trial = 0
+
+        #generate spike on graph everytime it enter new trial
+        if param.trial_count != trial_prev:
+            new_trial = 100
+
+        #generate spike on graph everytime error is introduced (and show error position)
         if param_err.is_err_introduced == True:
             intro_error = 100.0
-        myData = [param.orthosis_position,param_err.err_position,param.orthosis_force,
-                  param.orthosis_deflection,param.orthosis_f_offset,param.orthosis_status,param.orthosis_voltage,intro_error]
+            err_pos = param_err.err_position
+
+        myData = [param.orthosis_position,err_pos,param.orthosis_force,
+                  param.orthosis_deflection,intro_error,new_trial]
         
         #Publish data to JS WebAPP
         orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
@@ -71,6 +82,8 @@ def runOrthosis():
             print(f"Trial Count: {param.trial_count}")
             print(f"Error Count: {param_err.err_count}")
             print(f"Error Seq  : {param_err.err_sequence}")
+        
+        trial_prev = param.n_trials
         
         end_time = time.time()  # Record the end time
         execution_time = end_time - start_time  # Calculate the execution time for this iteration

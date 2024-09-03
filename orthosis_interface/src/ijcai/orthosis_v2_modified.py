@@ -42,13 +42,15 @@ def runOrthosis():
     print("Orthosis Process Ready!!")
     stop_flag = False
     zmqPub = FlaskZMQPub()
-    myLabel = ["orth_pos","orth_des_pos","orth_force","disturb_intro"]
+    myLabel = ["orth_pos","orth_des_pos","orth_force","disturb_intro","new_trial"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
 
     # Initialize a list to store execution times
     execution_times = []
+
+    prev_trial = orthosis_obj.n_trials
 
     while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
 
@@ -57,6 +59,24 @@ def runOrthosis():
         orthosis_obj.readValues()
         orthosis_obj.runExperimentRandomError(flag_flexion_done, disturbing, flag_flexion_started, flag_normal_trigger)
         # setattr(orthosis_obj,'is_verbose', True)
+    
+        # Safe KeyboardInterrupt
+        if getattr(orthosis_obj,'safe_interrupt'):
+            print("Exiting the orthosis process safely!!")
+            orthosis_obj.orthosis_handle.disable_motor()
+            break
+        new_trial = 0
+        if prev_trial != orthosis_obj.trial_count:
+            new_trial = 100
+
+        if disturbing[0] == True:
+            disturb = 100.0
+
+        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb,new_trial]
+        
+        #publish data to JS backend
+        zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
+
         if getattr(orthosis_obj,'is_verbose'):
             print(f"Trial Count     : {getattr(orthosis_obj,'trial_count')}")
             print(f"Error Count     : {getattr(orthosis_obj,'err_count')}")
@@ -65,20 +85,8 @@ def runOrthosis():
             print(f"orthosis pos des: {getattr(orthosis_obj,'orthosis_pose_desired')}")
             print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
             print(f"is error        : {disturbing[0]} {disturb}")
-        # Safe KeyboardInterrupt
-        if getattr(orthosis_obj,'safe_interrupt'):
-            print("Exiting the orthosis process safely!!")
-            orthosis_obj.orthosis_handle.disable_motor()
-            break
 
-        if disturbing[0] == True:
-            disturb = 100.0
-
-        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb]
-        
-        #publish data to JS backend
-        zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
-
+        prev_trial = orthosis_obj.n_trials
 
         end_time = time.time()  # Record the end time
         execution_time = end_time - start_time  # Calculate the execution time for this iteration
