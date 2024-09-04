@@ -481,7 +481,7 @@ class FlaskZMQPub():
             print(data_string)
             self.mySocket.send_string(data_string)
 
-            time.sleep(0.05)
+            time.sleep(0.03)
 
         else :
             time.sleep(0.5)
