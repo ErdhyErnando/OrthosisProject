@@ -83,7 +83,7 @@ def runOrthosis():
 
         
         
-        if num_ittr == 150:
+        if num_ittr == 100:
             #publish data to JS backend
             myDatas = [orthosis_obj.orthosis_position,disturb,new_trial,pressed]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
@@ -271,12 +271,12 @@ if __name__ == "__main__":
     
 
     #Deleting old SharedArrays (Already done in runOrthosis Function)
-    # if len(sa.list()) != 0:
-    #     sa.delete("shm://button")
-    #     sa.delete("shm://flex")
-    #     sa.delete("shm://dist")
-    #     sa.delete("shm://flst")
-    #     sa.delete("shm://notr")
+    if len(sa.list()) != 0:
+        sa.delete("shm://button")   
+        sa.delete("shm://flex")
+        sa.delete("shm://dist")
+        sa.delete("shm://flst")
+        sa.delete("shm://notr")
 
         
     # Creating SharedArrays
