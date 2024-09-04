@@ -95,7 +95,7 @@ def runOrthosis():
             print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
             print(f"is error        : {disturbing[0]} {disturb}")
 
-        prev_trial = orthosis_obj.n_trials
+        prev_trial = orthosis_obj.trial_count
 
         end_time = time.time()  # Record the end time
         execution_time = end_time - start_time  # Calculate the execution time for this iteration
