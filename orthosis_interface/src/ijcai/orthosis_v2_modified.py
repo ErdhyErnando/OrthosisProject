@@ -90,7 +90,7 @@ def runOrthosis():
             num_ittr = 0
         
         else :
-            myDatas = [None,None,new_trial,None]
+            myDatas = [None,disturb,new_trial,pressed]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
             num_ittr += 1
 
