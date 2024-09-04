@@ -55,7 +55,7 @@ def runOrthosis():
     while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
 
         start_time = time.time()  # Record the start time
-        disturb = 0
+        disturb = None
         orthosis_obj.readValues()
         orthosis_obj.runExperimentRandomError(flag_flexion_done, disturbing, flag_flexion_started, flag_normal_trigger)
         # setattr(orthosis_obj,'is_verbose', True)
@@ -67,7 +67,7 @@ def runOrthosis():
             break
 
         #generate spike on graph everytime new trial begin
-        new_trial = 0
+        new_trial = None
         if prev_trial != orthosis_obj.trial_count:
             new_trial = 100
 
@@ -76,21 +76,21 @@ def runOrthosis():
             disturb = 100.0
 
         #generate spike on graph if the button is pressed
-        pressed = 0
+        pressed = None
         if is_pressed[0] == True:
             pressed = 100
 
 
         
         
-        if num_ittr == 10:
+        if num_ittr == 100:
             #publish data to JS backend
             myDatas = [orthosis_obj.orthosis_position,disturb,new_trial,pressed]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
             num_ittr = 0
         
         else :
-            myDatas = [None,None,None,None]
+            myDatas = [None,None,new_trial,None]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
             num_ittr += 1
 
