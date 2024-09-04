@@ -567,7 +567,7 @@ def ZMQPublish(datas, labels, stop_flag,mySocket):
         print(data_string)
         mySocket.send_string(data_string)
 
-        time.sleep(0.02)
+        time.sleep(0.04)
 
     else :
         time.sleep(0.5)

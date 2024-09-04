@@ -134,6 +134,7 @@ def runButton():
                 print("Button Pressed!!")
             elif param.button_val == b'\x00':
                 is_pressed[0] = False
+        time.sleep(0.06)
 
 
 #Function to replace the button with keyboard and mouse
