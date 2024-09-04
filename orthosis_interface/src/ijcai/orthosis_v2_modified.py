@@ -83,7 +83,7 @@ def runOrthosis():
 
         
         
-        if num_ittr == 100:
+        if num_ittr == 150:
             #publish data to JS backend
             myDatas = [orthosis_obj.orthosis_position,disturb,new_trial,pressed]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
