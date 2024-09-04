@@ -42,7 +42,7 @@ def runOrthosis():
     print("Orthosis Process Ready!!")
     stop_flag = False
     zmqPub = FlaskZMQPub()
-    myLabel = ["orth_pos","orth_des_pos","orth_force","disturb_intro","new_trial","is_pressed"]
+    myLabel = ["orth_pos","disturb_intro","new_trial","is_pressed"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
@@ -51,7 +51,7 @@ def runOrthosis():
     execution_times = []
 
     prev_trial = orthosis_obj.n_trials
-
+    num_ittr = 0
     while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
 
         start_time = time.time()  # Record the start time
@@ -81,10 +81,19 @@ def runOrthosis():
             pressed = 100
 
 
-        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb,new_trial,pressed]
         
-        #publish data to JS backend
-        zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
+        
+        if num_ittr == 10:
+            #publish data to JS backend
+            myDatas = [orthosis_obj.orthosis_position,disturb,new_trial,pressed]
+            zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
+            num_ittr = 0
+        
+        else :
+            myDatas = [None,None,None,None]
+            zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
+            num_ittr += 1
+
 
         if getattr(orthosis_obj,'is_verbose'):
             print(f"Trial Count     : {getattr(orthosis_obj,'trial_count')}")
@@ -95,6 +104,7 @@ def runOrthosis():
             print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
             print(f"pressed value   : {is_pressed[0]} {pressed}")
             print(f"is error        : {disturbing[0]} {disturb}")
+            print(f"num_ittr        : {num_ittr}")
 
         prev_trial = orthosis_obj.trial_count
 
