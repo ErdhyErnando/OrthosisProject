@@ -45,12 +45,13 @@ def runOrthosis():
     
     #establishing ZMQ Publisher to publish data to the JS WebAPP
     pubSocket = orthosis_lib.EstablishZMQPub()
-    myLabels = ["orth_pos","err_pos","orth_force","orth_def","is_error_introduced","new_trial","is_pressed"]
+    myLabels = ["orth_pos","err_pos","is_error_introduced","new_trial","is_pressed"]
     print("Orthosis Process Ready!!")
     trial_counter[0] = 0
 
     # Initialize a list to store execution times
     execution_times = []
+    num_ittr = 0
 
     while param.trial_count < param.n_trials:
         start_time = time.time()  # Record the start time
@@ -60,10 +61,10 @@ def runOrthosis():
         current_pos[0] = param.orthosis_position
         error_pos[0] = param_err.err_position
         trial_counter[0] = param.trial_count
-        intro_error = 0.0
+        intro_error = None
         err_pos = None
-        new_trial = 0
-        pressed = 0
+        new_trial = None
+        pressed = None
 
         #generate spike on graph everytime it enter new trial
         if param.trial_count != trial_prev:
@@ -78,11 +79,19 @@ def runOrthosis():
         if is_pressed[0] == True:
             pressed = 100
 
-        myData = [param.orthosis_position,err_pos,param.orthosis_force,
-                  param.orthosis_deflection,intro_error,new_trial,pressed]
+
+        if num_ittr == 100:
         
-        #Publish data to JS WebAPP
-        orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
+            myData = [param.orthosis_position,err_pos,intro_error,new_trial,pressed]
+            #Publish data to JS WebAPP
+            orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
+            num_ittr = 0
+
+        else:
+            myData = [None,err_pos,intro_error,new_trial,pressed]
+            num_ittr += 1
+
+
         if param.is_verbose and not is_write[0]:
             print(f"Trial Count: {param.trial_count}")
             print(f"Error Count: {param_err.err_count}")
