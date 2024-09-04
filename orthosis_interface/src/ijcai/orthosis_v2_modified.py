@@ -93,6 +93,7 @@ def runOrthosis():
             print(f"orthosis pos    : {getattr(orthosis_obj,'orthosis_position')}")
             print(f"orthosis pos des: {getattr(orthosis_obj,'orthosis_pose_desired')}")
             print(f"orthosis force  : {getattr(orthosis_obj,'orthosis_force')}")
+            print(f"pressed value   : {is_pressed[0]} {pressed}")
             print(f"is error        : {disturbing[0]} {disturb}")
 
         prev_trial = orthosis_obj.trial_count
