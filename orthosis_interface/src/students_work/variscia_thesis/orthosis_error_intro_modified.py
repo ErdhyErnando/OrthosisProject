@@ -45,7 +45,7 @@ def runOrthosis():
     
     #establishing ZMQ Publisher to publish data to the JS WebAPP
     pubSocket = orthosis_lib.EstablishZMQPub()
-    myLabels = ["orth_pos","err_pos","orth_force","orth_def","is_error_introduced","new_trial"]
+    myLabels = ["orth_pos","err_pos","orth_force","orth_def","is_error_introduced","new_trial","is_pressed"]
     print("Orthosis Process Ready!!")
     trial_counter[0] = 0
 
@@ -63,6 +63,7 @@ def runOrthosis():
         intro_error = 0.0
         err_pos = None
         new_trial = 0
+        pressed = 0
 
         #generate spike on graph everytime it enter new trial
         if param.trial_count != trial_prev:
@@ -73,8 +74,12 @@ def runOrthosis():
             intro_error = 100.0
             err_pos = param_err.err_position
 
+        #generate spike on graph everytime the button is pressed
+        if is_pressed[0] == True:
+            pressed = 100
+
         myData = [param.orthosis_position,err_pos,param.orthosis_force,
-                  param.orthosis_deflection,intro_error,new_trial]
+                  param.orthosis_deflection,intro_error,new_trial,pressed]
         
         #Publish data to JS WebAPP
         orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
@@ -253,6 +258,7 @@ if __name__ == "__main__":
     parser.add_argument('-eseq','--expt_seq', help='Experiment Sequence')
     parser.add_argument('-esuf','--expt_suffix', help='Experiment Suffix')
     parser.add_argument('-set','--set_num', help='Set number')
+    parser.add_argument('-nm','--name',help='Subject Name')
 
 
     args = vars(parser.parse_args())

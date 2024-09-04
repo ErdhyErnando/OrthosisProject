@@ -42,7 +42,7 @@ def runOrthosis():
     print("Orthosis Process Ready!!")
     stop_flag = False
     zmqPub = FlaskZMQPub()
-    myLabel = ["orth_pos","orth_des_pos","orth_force","disturb_intro","new_trial"]
+    myLabel = ["orth_pos","orth_des_pos","orth_force","disturb_intro","new_trial","is_pressed"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
@@ -65,14 +65,23 @@ def runOrthosis():
             print("Exiting the orthosis process safely!!")
             orthosis_obj.orthosis_handle.disable_motor()
             break
+
+        #generate spike on graph everytime new trial begin
         new_trial = 0
         if prev_trial != orthosis_obj.trial_count:
             new_trial = 100
 
+        #generate spike on graph if there is a distrubtion
         if disturbing[0] == True:
             disturb = 100.0
 
-        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb,new_trial]
+        #generate spike on graph if the button is pressed
+        pressed = 0
+        if is_pressed[0] == True:
+            pressed = 100
+
+
+        myDatas = [orthosis_obj.orthosis_position, orthosis_obj.orthosis_pose_desired, orthosis_obj.orthosis_force,disturb,new_trial,pressed]
         
         #publish data to JS backend
         zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
@@ -230,6 +239,7 @@ if __name__ == "__main__":
     parser.add_argument('-tf','--thr_flex', help='Force threshold for flexion')
     parser.add_argument('-te','--thr_ext', help='Force threshold for extension')
     parser.add_argument('-nt','--num_trial',help='Number of trial')
+    parser.add_argument('-nm','--name',help='Name of Subject')
 
 
     args = vars(parser.parse_args())
@@ -245,6 +255,7 @@ if __name__ == "__main__":
         setattr(orthosis_obj, 'eff_thresh_ext', float(args['thr_ext']))
     if args['num_trial'] is not None:
         setattr(orthosis_obj, 'n_trials', int(args['num_trial']))
+    
     
 
     #Deleting old SharedArrays (Already done in runOrthosis Function)
@@ -275,6 +286,6 @@ if __name__ == "__main__":
 
     # Starting the processes
     pr_orthosis.start()
-    # pr_button.start()
+    pr_button.start()
     # pr_trigger.start()
 
