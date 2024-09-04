@@ -143,7 +143,7 @@ def runButton():
                 print("Button Pressed!!")
             elif getattr(button_obj,'button_val') == ',':
                 is_pressed[0] = False
-        time.sleep(0.07)
+        time.sleep(0.04)
         # Safe Keyboard Interrupt
         if getattr(button_obj,'safe_interrupt'):
             print("Exiting Button process safely!")
