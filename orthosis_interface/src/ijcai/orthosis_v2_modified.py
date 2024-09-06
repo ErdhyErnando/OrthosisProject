@@ -49,7 +49,7 @@ def runOrthosis():
 
     # Initialize a list to store execution times
     execution_times = []
-
+    prev_state = "E"
     prev_flag_flexion_started = 0.0
     prev_trial = orthosis_obj.n_trials
     num_ittr = 0
@@ -68,7 +68,7 @@ def runOrthosis():
             break
         
         #flexion or extentiom
-        flex_ext = None
+        flex_ext = prev_state
         if flag_flexion_done[0] == 0.0 and flag_flexion_started[0] == 1.0:
             if prev_flag_flexion_started == 0.0: # If flexion started
                 print("F trigger is sent")
@@ -116,6 +116,8 @@ def runOrthosis():
             print(f"state flex/ext  : {flex_ext}")
 
         prev_trial = orthosis_obj.trial_count
+        prev_state = flex_ext
+        prev_flag_flexion_started   = flag_flexion_started[0]
 
         end_time = time.time()  # Record the end time
         execution_time = end_time - start_time  # Calculate the execution time for this iteration
