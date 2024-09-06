@@ -4,58 +4,50 @@ import SharedArray as sa
 import time
 
 
-"""
-function to publish data from orthosis device.
-Input : array of SharedArray address from whom the will be retrieved
-output : None                                                   
-"""
+class FlaskZMQPub():
+    """
+    Object that connect the orthosis device to the web trough ZMQ                                           
+    """
 
-#!/usr/bin/env python3
-import zmq
-import SharedArray as sa
-import time
-
-
-"""
-function to publish data from orthosis device.
-Input : array of SharedArray address from whom the will be retrieved
-output : None                                                   
-"""
-
-def zmq_publisher(sa_address, labels, stop_flag_add):
-    print("pub running")
-
-    port = "5001"
-    # Creates a socket instance
-    context = zmq.Context()
-    socket = context.socket(zmq.PUB)
-    # Binds the socket to a predefined port on localhost
-    socket.bind(f"tcp://*:{port}")
-
-    stop_flag = 0
-
-    while stop_flag == 0:
-
-        data_arr = []
-        for address in sa_address:
-            data_arr.append(sa.attach(address))
-
-        data_string = ""
-        label_idx = 0
-        for data in data_arr :
-            data_string += labels[label_idx]
-            data_string += f":{data[0]}:"
-            label_idx += 1
-
-        print(data_string)
-
-        flags = sa.attach(stop_flag_add)
-        stop_flag = flags[0]
-        socket.send_string(data_string)
-        time.sleep(0.1)
+    def __init__(self):
+        """
+        Initialize ZMQ Publisher connection
+        """
+        
+        port = "5001"
+        # Creates a socket instance
+        context = zmq.Context()
+        self.mySocket = context.socket(zmq.PUB)
+        # Binds the socket to a predefined port on localhost
+        self.mySocket.bind(f"tcp://*:{port}")
 
 
-    time.sleep(0.5)
-    socket.send_string("STOP")
+    def zmq_publish(self,datas,labels,StopFlag):
+        """
+        Publish data to the JS WebAPP
+        input :
+            Arr Datas (Float)   : Array of data that will be sent
+            Arr Labels (String) : Array of label of the data (the arrangement of the label must be correspond to the arrangement of data)
+            StopFLag (Bool)     : Flag to indicate that the data stream already stopped   
+        """
+        
+        if StopFlag == False:
+
+            data_string = ""
+            label_idx = 0
+            for data in datas:
+                data_string += labels[label_idx]
+                data_string += f":{data}:"
+                label_idx += 1
+
+            print(data_string)
+            self.mySocket.send_string(data_string)
+
+            time.sleep(0.01)
+
+        else :
+            time.sleep(0.5)
+            self.mySocket.send_string("STOP")
+
 
 
