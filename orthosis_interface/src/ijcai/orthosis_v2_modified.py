@@ -80,9 +80,7 @@ def runOrthosis():
         if is_pressed[0] == True:
             pressed = 100
 
-
-        
-        
+        #sending data only after 150 itteration
         if num_ittr == 150 or pressed != None or disturb != None or new_trial != None:
             #publish data to JS backend
             myDatas = [orthosis_obj.orthosis_position,disturb,new_trial,pressed]

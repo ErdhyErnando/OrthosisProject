@@ -79,8 +79,8 @@ def runOrthosis():
         if is_pressed[0] == True:
             pressed = 100
 
-
-        if num_ittr == 100:
+        #sending data only after 150 itteration
+        if num_ittr == 150 or pressed != None or intro_error != None or new_trial != None:
         
             myData = [param.orthosis_position,err_pos,intro_error,new_trial,pressed]
             #Publish data to JS WebAPP
@@ -88,7 +88,6 @@ def runOrthosis():
             num_ittr = 0
 
         else:
-            myData = [None,err_pos,intro_error,new_trial,pressed]
             num_ittr += 1
 
 
