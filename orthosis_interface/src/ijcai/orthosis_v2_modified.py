@@ -42,7 +42,7 @@ def runOrthosis():
     print("Orthosis Process Ready!!")
     stop_flag = False
     zmqPub = FlaskZMQPub()
-    myLabel = ["orth_pos","disturb_intro","new_trial","is_pressed"]
+    myLabel = ["orth_pos","flex_ext","disturb_intro","new_trial","is_pressed"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
@@ -50,6 +50,7 @@ def runOrthosis():
     # Initialize a list to store execution times
     execution_times = []
 
+    prev_flag_flexion_started = 0.0
     prev_trial = orthosis_obj.n_trials
     num_ittr = 0
     while getattr(orthosis_obj,'is_orthosis_running') and getattr(orthosis_obj,'trial_count') < getattr(orthosis_obj,'n_trials'):# and move_to_start_pos: # added start pos here 
@@ -65,6 +66,17 @@ def runOrthosis():
             print("Exiting the orthosis process safely!!")
             orthosis_obj.orthosis_handle.disable_motor()
             break
+        
+        #flexion or extentiom
+        flex_ext = None
+        if flag_flexion_done[0] == 0.0 and flag_flexion_started[0] == 1.0:
+            if prev_flag_flexion_started == 0.0: # If flexion started
+                print("F trigger is sent")
+                flex_ext = "F"
+        elif flag_flexion_done[0] == 1.0 and flag_flexion_started[0] == 0.0:
+            if prev_flag_flexion_started == 1.0: # If extension started
+                flex_ext = "E"
+                print("E trigger is sent")
 
         #generate spike on graph everytime new trial begin
         new_trial = None
@@ -83,7 +95,7 @@ def runOrthosis():
         #sending data only after 150 itteration
         if num_ittr == 150 or pressed != None or disturb != None or new_trial != None:
             #publish data to JS backend
-            myDatas = [orthosis_obj.orthosis_position,disturb,new_trial,pressed]
+            myDatas = [orthosis_obj.orthosis_position,flex_ext,disturb,new_trial,pressed]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
             num_ittr = 0
         
@@ -101,6 +113,7 @@ def runOrthosis():
             print(f"pressed value   : {is_pressed[0]} {pressed}")
             print(f"is error        : {disturbing[0]} {disturb}")
             print(f"num_ittr        : {num_ittr}")
+            print(f"state flex/ext  : {flex_ext}")
 
         prev_trial = orthosis_obj.trial_count
 
