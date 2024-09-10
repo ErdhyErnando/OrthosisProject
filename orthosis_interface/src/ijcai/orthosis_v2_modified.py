@@ -42,7 +42,7 @@ def runOrthosis():
     print("Orthosis Process Ready!!")
     stop_flag = False
     zmqPub = FlaskZMQPub()
-    myLabel = ["orth_pos","flex_ext","disturb_intro","new_trial","is_pressed"]
+    myLabel = ["orth_pos","flex_ext","disturb_intro","new_trial","is_pressed","err_count"]
     # move to start position first 
     orthosis_obj.move_to_start_position(getattr(orthosis_obj,'fully_extended_pos'))
     print(f"Orthosis moved to its start position!!")
@@ -95,7 +95,7 @@ def runOrthosis():
         #sending data only after 150 itteration
         if num_ittr == 150 or pressed != None or disturb != None or new_trial != None:
             #publish data to JS backend
-            myDatas = [orthosis_obj.orthosis_position,flex_ext,disturb,new_trial,pressed]
+            myDatas = [orthosis_obj.orthosis_position,flex_ext,disturb,new_trial,pressed,orthosis_obj.err_count]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
             num_ittr = 0
         

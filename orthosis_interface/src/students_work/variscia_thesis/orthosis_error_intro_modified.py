@@ -45,7 +45,7 @@ def runOrthosis():
     
     #establishing ZMQ Publisher to publish data to the JS WebAPP
     pubSocket = orthosis_lib.EstablishZMQPub()
-    myLabels = ["orth_pos","err_pos","flex_ext","distrub_intro","new_trial","is_pressed"]
+    myLabels = ["orth_pos","err_pos","flex_ext","distrub_intro","new_trial","is_pressed","err_count"]
     print("Orthosis Process Ready!!")
     trial_counter[0] = 0
 
@@ -89,7 +89,7 @@ def runOrthosis():
         #sending data only after 150 itteration
         if num_ittr == 150 or pressed != None or intro_error != None or new_trial != None:
         
-            myData = [param.orthosis_position,err_pos,flex_ext,intro_error,new_trial,pressed]
+            myData = [param.orthosis_position,err_pos,flex_ext,intro_error,new_trial,pressed,param_err.err_count]
             #Publish data to JS WebAPP
             orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
             num_ittr = 0
