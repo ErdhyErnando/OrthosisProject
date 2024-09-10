@@ -311,7 +311,7 @@ if __name__ == "__main__":
     # Queue object to append all values to log 
     data_list_q     = mp.Queue()
 
-    # # Deleting old SharedArrays
+    # Deleting old SharedArrays
     # if len(sa.list()) != 0:
     #     sa.delete("shm://test")
     #     sa.delete("shm://wr")

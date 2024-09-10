@@ -17,9 +17,12 @@ def dummy():
     go_pressed = False
     prev_trial = 0
     stopFlag = False
+    err_count = 0
+    err_ittr = 0
     new_state = "F"
     current_state = "F"
-    labels = ["orth_pos","flex_ext","disturb_intro","new_trial","is_pressed"]
+    labels = ["orth_pos","flex_ext","disturb_intro","new_trial","is_pressed","err_count"]
+    error_introduced = False 
     zmqPub = FlaskZMQPub()
     while n_trial < 4:
         if ittr_deg == 10 and current_state == "F":
@@ -32,9 +35,18 @@ def dummy():
             ittr_deg += 1
         
         disturb = None
-        if n_trial == 2:
-            disturb = 100
+        if n_trial == 2 and error_introduced == False:
+            error_introduced = True
             go_pressed = True
+            err_count += 1
+        elif n_trial != prev_trial:
+            error_introduced = False
+            err_ittr = 0
+
+        if error_introduced == True and err_ittr<5:
+            disturb = 100
+            err_ittr +=1
+
 
         new_trial = None
         if n_trial != prev_trial:
@@ -47,7 +59,7 @@ def dummy():
 
 
         if ittr_pub == 150 or disturb != None or new_trial != None or is_pressed != None:
-            datas = [degree,current_state,disturb,new_trial,is_pressed]
+            datas = [degree,current_state,disturb,new_trial,is_pressed,err_count]
             zmqPub.zmq_publish(datas,labels,stopFlag)
             ittr_pub = 0
 
