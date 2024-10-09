@@ -95,7 +95,7 @@ def runOrthosis():
         #sending data only after 150 itteration
         if num_ittr == 150 or pressed != None or disturb != None or new_trial != None:
             #publish data to JS backend
-            myDatas = [orthosis_obj.orthosis_position,flex_ext,disturb,new_trial,pressed,orthosis_obj.err_count]
+            myDatas = [round(orthosis_obj.orthosis_position,2),flex_ext,round(disturb,2),new_trial,pressed,orthosis_obj.err_count]
             zmqPub.zmq_publish(myDatas,myLabel,stop_flag)
             num_ittr = 0
         
