@@ -475,7 +475,7 @@ class FlaskZMQPub():
             label_idx = 0
             for data in datas:
                 data_string += labels[label_idx]
-                data_string += f":{data}:"
+                data_string += f":{data};"
                 label_idx += 1
 
             print(data_string)
