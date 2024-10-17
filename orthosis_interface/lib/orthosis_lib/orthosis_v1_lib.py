@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-## This library contains all the methods being used for the orthosis force control thread ##
+## This library is the modification of orthosis_v1_lib.py with additional function
+## to communicate with JS WebAPP via ZMQ.
 
 import random
 import time
@@ -10,7 +11,7 @@ import SharedArray as sa
 import sys, os
 # sys.path.append('../')
 from os.path import dirname, join, abspath
-sys.path.insert(0, abspath(join(dirname(__file__), '../../')))
+sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 import param.orthosis_param as param
 import param.pseudo_viz_param as param_viz
 import param.error_param as param_err
@@ -495,7 +496,7 @@ def checkErrorDuration(disturbing):
         param_err.is_err_introduced = True
         param_err.err_count += 1
 
-def headerFile():
+def headerFile(error_seq):
     """
     This function creates a header section for the log file with the experiment info
     """
@@ -504,7 +505,9 @@ def headerFile():
         f.write(f"Error duration: {param_err.duration} \n")
         f.write(f"Total errors  : {param_err.num} \n")
         f.write(f"Scenario      : {param.expt_scenario} \n")
-        # f.write(f"Sequence      : {param.error_sequence} \n")
+        f.write(f"Err Sequence  : {error_seq} \n")
+        f.write(f"Min Error Pos : {param_err.err_min_pos} \n")
+        f.write(f"Max Error Pos : {param_err.err_max_pos} \n")
         f.write(f"Suffix        : {param.expt_suffix} \n")
         f.write(f"Set number    : {param.set_num} \n")
         f.write('Data Collection \n\n\n')  
@@ -518,58 +521,55 @@ def establishZMQ():
     my_context      = zmq.Context()
     my_socket       = my_context.socket(zmq.SUB)
     my_socket.connect("tcp://"+param.zmq_server_ip)
-    # my_socket.setsockopt(zmq.SUBSCRIBE, param.zmq_topic)
-    my_socket.subscribe("10")
+    my_socket.setsockopt(zmq.SUBSCRIBE, param.zmq_topic)
 
     return my_socket
 
 
-
-def zmqFlaskConnection(sa_address, labels, stop_flag_add):
+def EstablishZMQPub():
     """
-    function to publish data from orthosis device to flask.
-    Input : 
-    - array of SharedArray address from whom the will be retrieved
-    - array of label correspond to the data from sharedArray
-    - addres of sharedArray stop flag
+    Function to establish a ZMQ publisher (connection to WebAPP purpose).
 
-    output : None                                                   
+    Returns:
+        mySocket (SyncSocket): socket object that will be used.
     """
-
-
-    print("pub running")
-
     port = "5001"
     # Creates a socket instance
     context = zmq.Context()
-    socket = context.socket(zmq.PUB)
+    mySocket = context.socket(zmq.PUB)
     # Binds the socket to a predefined port on localhost
-    socket.bind(f"tcp://*:{port}")
+    mySocket.bind(f"tcp://*:{port}")
 
-    stop_flag = 0
+    return mySocket
 
-    while stop_flag == 0:
 
-        data_arr = []
-        for address in sa_address:
-            data_arr.append(sa.attach(address))
+def ZMQPublish(datas, labels, stop_flag,mySocket):
+    """
+    function to publish data from orthosis device to WebApp.
+
+    Parameters:
+        Datas (list of float): List of data that will be sent. 
+        labels (list of String): Array of label of the data (the arrangement of the label must be correspond to the arrangement of data).
+        stop_flag (Bool): Flag to indicate that the data stream already stopped.
+        mySocket (SyncSocket): Socket object that wanted to be used.                                                    
+    """
+    
+    if stop_flag == False:
 
         data_string = ""
         label_idx = 0
-        for data in data_arr :
+        for data in datas :
             data_string += labels[label_idx]
-            data_string += f":{data[0]}:"
+            data_string += f":{data}:"
             label_idx += 1
 
         print(data_string)
+        mySocket.send_string(data_string)
 
-        flags = sa.attach(stop_flag_add)
-        stop_flag = flags[0]
-        socket.send_string(data_string)
+        time.sleep(0.01)
 
-        time.sleep(0.1)
-
-    time.sleep(0.5)
+    else :
+        time.sleep(0.5)
+        mySocket.send_string("STOP")
     
-    print("stop")
    

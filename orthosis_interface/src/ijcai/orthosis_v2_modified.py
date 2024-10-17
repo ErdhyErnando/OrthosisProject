@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 ############# NOTE #############
-# This script is the main file for the orthosis experiment for the IJCAI'23 competition
-#Has been modified to be able to communicate with the JS WebAPP
+# This script is modified version of the main file for the orthosis experiment for the IJCAI'23 competition
+# Has been modified to be able to communicate with the JS WebAPP.
 # Command to setup motor CAN interface : sudo ip link set can0 up type can bitrate 1000000
 ################################
 
@@ -170,29 +170,6 @@ def runButton():
             print("Exiting Button process safely!")
             break
 
-
-#To replace button function using Keyboard and Mouse
-# def runButton():
-#     def on_release(key):
-#         if key == Key.esc:
-#             print("exit run Button")
-#             m_listener.stop()
-#             return False   
-
-#     def on_click(x, y, button, pressed):
-#         if pressed:
-#             is_pressed[0] = True
-#             print("Button Pressed!!")
-#         else:
-#             is_pressed[0] = False
-#             print("Button Released")
-
-#     with KeyboardListener(on_release=on_release) as k_listener, \
-#         MouseListener(on_click=on_click) as m_listener:
-#             k_listener.join()
-#             m_listener.join()
-
-
 #Running trigger with Arduino
 def runTrigger():
     trig_obj = TrigLib('/dev/ttyUSB1', 9600)
@@ -310,5 +287,5 @@ if __name__ == "__main__":
     # Starting the processes
     pr_orthosis.start()
     pr_button.start()
-    # pr_trigger.start()
+    # pr_trigger.start() 
 

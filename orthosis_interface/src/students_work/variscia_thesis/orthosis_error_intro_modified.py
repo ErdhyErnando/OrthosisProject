@@ -3,7 +3,8 @@
 ############# NOTE #############
 #This script is modification of orthosis_error_intro_mp_variscia.py
 #Several additional lines are added to communicate and send data from
-#Orthosis device to the JS WebApp.
+#Orthosis device to the JS WebApp. HAS NOT BEEN TESTED since the Orthosis v1
+#was broken during the development of this program.
 ###############################
 
 
@@ -25,7 +26,7 @@ import param.error_param as param_err
 # Uncomment the following if you have pip installed the orthosis_lib
 # import orthosis_lib.orthosis_v1_lib as orthosis_lib
 # Uncomment the following otherwise
-import lib.orthosis_lib.orthosis_v1_lib_modified as orthosis_lib
+import lib.orthosis_lib.orthosis_v1_lib as orthosis_lib
 
 
 #Function to run the orthosis
