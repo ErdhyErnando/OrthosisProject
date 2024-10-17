@@ -1,6 +1,6 @@
 # lib Folder
 
-This folder contain all library needed to run both orthosis V1 and V2 program. In this documentation, the Author will focus on how to use the function to establish connection and to publish data to the server of the Web App inside orthosis_v1_lib.py and orthosis_v2_lib_oop.py, since that was what the Author working on during the writing of this documentation. A modification to this documentation to include all description of the function would be very usefull.
+This folder contain all library needed to run both orthosis V1 and V2 program. In this documentation, the Author will focus on how to use the function to establish connection and to publish data to the server of the Web App inside orthosis_v1_lib.py and orthosis_v2_lib_oop.py, since that was what the Author working on during the writing of this documentation. **A modification to this documentation to include all description of the function would be very usefull.**
 
 ## orthosis_v1_lib.py
 
