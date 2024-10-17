@@ -241,7 +241,6 @@ if __name__ == "__main__":
     parser.add_argument('-nt','--num_trial',help='Number of trial')
     parser.add_argument('-nm','--name',help='Name of Subject')
 
-
     args = vars(parser.parse_args())
     if args['n_errors'] is not None:
         setattr(orthosis_obj, 'n_err', int(args['n_errors']))
