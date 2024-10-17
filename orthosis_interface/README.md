@@ -85,8 +85,7 @@ web app.
 
     ```
   - *orthosis_error_intro_modified.py* <br />
-  This script is the modification of the orthosis_error_intro_ijcai_oop.py created by Student Project Group (Sept 2024) which enable the program to connect to orthosis web app. Use this program to test the Orthosis V2 with the dedicated
-web app.
+  This script is the modification of the orthosis_error_intro_mp_variscia.py created by Student Project Group (Sept 2024) which enable the program to connect to orthosis web app. Use this program to test the Orthosis V1 with the dedicated web app.
 
   
 ## Coding Conventions
