@@ -60,8 +60,12 @@ This directory has all the main scripts for experiments. It is advisable to crea
   
     In order to setup the CAN to USB adapter, run the command ``` sudo ip link set can0 up type can bitrate 1000000 ```
 
-  - *orthosis_error_intro_ijcai.py* <br/>
-  This script is similar to orthosis_error_intro_ijcai.py but with object-oriented programming.  
+  - *orthosis_error_intro_ijcai_oop.py* <br/>
+  This script is similar to orthosis_error_intro_ijcai.py but with object-oriented programming.
+
+  - *orthosis_v2_modified.py* <br />
+  This script is the modification of the orthosis_error_intro_ijcai_oop.py created by Student Project Group (Sept 2024) which enable the program to connect to orthosis web app. Use this program to test the Orthosis V2 with the dedicated
+web app.
 
   - *orthosis_pseudo_EMG_demo.py* <br />
   This is the main script used for the SummerUni demonstration of Onset detection using the pre-recorded EMG data using orthosis_v1 which took place at the UDE on Aug 2, 2022.
@@ -80,8 +84,11 @@ This directory has all the main scripts for experiments. It is advisable to crea
     python orthosis_error_intro_mp --help
 
     ```
+  - *orthosis_error_intro_modified.py* <br />
+  This script is the modification of the orthosis_error_intro_ijcai_oop.py created by Student Project Group (Sept 2024) which enable the program to connect to orthosis web app. Use this program to test the Orthosis V2 with the dedicated
+web app.
 
-
+  
 ## Coding Conventions
 This section describes the general coding guidelines to follow during development process.
 - **Programming Language** <br />
