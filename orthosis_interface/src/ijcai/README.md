@@ -18,7 +18,7 @@ to pass number of trial. Can also be called using *-nt*.
 - *--name* <br />
 to pass name of the subject. **Name can not contain space (use "_" instead).** Can alos be called uusing *-nm*.
 
-This run time argument can be called before running the program inside CLI or inside the WebApp but not necessary. This program has the functions and the main to run those function using multithreading library.
+This run time argument can be called before running the program inside CLI or inside the WebApp but not necessary. This program has the functions and three main to run those function using multithreading library.
 ```python
 #!/usr/bin/env python3
 
