@@ -7,7 +7,7 @@ This project contains files for interfacing with the Orthosis. There are 2 diffe
 This project is divided into different directories, each serving a specific purpose in order to facilitate a minimalist and easy-to-comprehend code.
 - **lib** <br />
 This directory contains all the library files for the project. It is advisable to create separate libraries specific to the purpose and importing it into the main script. 
-  - *orthosis_lib.py* <br />
+  - *orthosis_v1_lib.py* <br />
   This file contains all the functions for operating the orthosis_v1.
   - *orthosis_v2_lib.py* <br />
   This file contains all the functions for operating the orthosis_v2.
