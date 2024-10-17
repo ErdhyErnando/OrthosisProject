@@ -69,7 +69,7 @@ def runOrthosis():
 
         #generate spike on graph everytime it enter new trial
         if param.trial_count != trial_prev:
-            new_trial = 100
+            new_trial = 100.0
 
         #generate spike on graph everytime error is introduced (and show error position)
         if param_err.is_err_introduced == True:
@@ -78,7 +78,7 @@ def runOrthosis():
 
         #generate spike on graph everytime the button is pressed
         if is_pressed[0] == True:
-            pressed = 100
+            pressed = 100.0
 
         #flexion or extention
         flex_ext = None
