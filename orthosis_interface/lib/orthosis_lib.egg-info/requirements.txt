@@ -5,3 +5,4 @@ SharedArray
 mini-cheetah-motor-driver-socketcan
 pyserial
 scipy
+pyzmq
