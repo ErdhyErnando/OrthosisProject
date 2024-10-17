@@ -422,3 +422,74 @@ Then there is a while loop which will always run as long as  the orthosis is run
             print("Exiting Button process safely!")
             break
 ```
+
+### runTrigger()
+This function will run Trigger to the arduino. It will sent certain data based on the state of the Orthosis. Below is the example of how the function notify the arduino whether the orthosis in Flexion state or Extention state. The other functionalities can be seen on the full code.
+
+```python
+        if flag_flexion_done[0] == 0.0 and flag_flexion_started[0] == 1.0:
+            if prev_flag_flexion_started == 0.0: # If flexion started
+                # ard_start_time = time.perf_counter()
+                trig_obj.arduino_handle.write(b'F') # flexion trigger
+                # print(f"Sending time :{time.perf_counter() - ard_start_time}" )
+                print("F trigger is sent")
+        elif flag_flexion_done[0] == 1.0 and flag_flexion_started[0] == 0.0:
+            if prev_flag_flexion_started == 1.0: # If extension started
+                trig_obj.arduino_handle.write(b'E') # extension trigger
+                print("E trigger is sent")
+```
+The program will write F to arduino if flexion, and E for Extension.
+
+### Main
+in the main program, the run time argument and orthosis object will be intialized.
+```python
+    orthosis_obj = OrthosisLib("can0", 0x01, "AK80_6_V1p1", 0.5)
+    
+    parser = argparse.ArgumentParser("Custom Error: ")
+    parser.add_argument('-n','--n_errors', help='Num of errors to introduce')
+    parser.add_argument('-d','--duration', help='Duration of error in microseconds')
+    parser.add_argument('-v','--verbose', help='Bool to decide if you want to print on console')
+    parser.add_argument('-tf','--thr_flex', help='Force threshold for flexion')
+    parser.add_argument('-te','--thr_ext', help='Force threshold for extension')
+    parser.add_argument('-nt','--num_trial',help='Number of trial')
+    parser.add_argument('-nm','--name',help='Name of Subject')
+
+    args = vars(parser.parse_args())
+    if args['n_errors'] is not None:
+        setattr(orthosis_obj, 'n_err', int(args['n_errors']))
+    if args['duration'] is not None:
+        setattr(orthosis_obj, 'duration', float(args['duration']))
+    if args['verbose'] is not None:
+        setattr(orthosis_obj, 'is_verbose', bool(args['verbose']))
+    if args['thr_flex'] is not None:
+        setattr(orthosis_obj, 'eff_thresh_flex', float(args['thr_flex']))
+    if args['thr_ext'] is not None:
+        setattr(orthosis_obj, 'eff_thresh_ext', float(args['thr_ext']))
+    if args['num_trial'] is not None:
+        setattr(orthosis_obj, 'n_trials', int(args['num_trial']))
+```
+it also intialized all of necessary sharedArray for communication between function.
+```python
+    # Creating SharedArrays
+    is_pressed          = sa.create("shm://button",1)
+    flag_flexion_done   = sa.create("shm://flex",1)
+    disturbing          = sa.create("shm://dist",1)
+    flag_flexion_started= sa.create("shm://flst",1)
+    flag_normal_trigger = sa.create("shm://notr",1)
+```
+Then at the last part, all of the function will be assigned to dedicated multithreading process and then run those thread in parallel.
+```python
+    # Process 1 - Orthosis process
+    pr_orthosis    = mp.Process(target=runOrthosis)
+
+    # Process 2 - Button press process
+    pr_button      = mp.Process(target=runButton)
+
+    # Process 3 - Trigger generating process
+    pr_trigger     = mp.Process(target=runTrigger)
+
+    # Starting the processes
+    pr_orthosis.start()
+    pr_button.start()
+    pr_trigger.start() 
+```
