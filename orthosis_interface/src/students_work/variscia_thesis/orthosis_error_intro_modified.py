@@ -28,7 +28,6 @@ import param.error_param as param_err
 # Uncomment the following otherwise
 import lib.orthosis_lib.orthosis_v1_lib as orthosis_lib
 
-
 #Function to run the orthosis
 def runOrthosis():
     orthosis_handle = serial.Serial(port=param.orthosis_port_name, baudrate=param.orthosis_baud_rate)
@@ -98,7 +97,6 @@ def runOrthosis():
         else:
             num_ittr += 1
 
-
         if param.is_verbose and not is_write[0]:
             print(f"Trial Count: {param.trial_count}")
             print(f"Error Count: {param_err.err_count}")
@@ -109,7 +107,6 @@ def runOrthosis():
         end_time = time.time()  # Record the end time
         execution_time = end_time - start_time  # Calculate the execution time for this iteration
         execution_times.append(execution_time)  # Store the execution time
-
 
     myStop_flag = True
     orthosis_lib.ZMQPublish(myData,myLabels,myStop_flag,pubSocket)
@@ -134,8 +131,6 @@ def runOrthosis():
     sa.delete("shm://position")
     sa.delete("shm://err_pos")
     sa.delete("shm://err_seq")
- 
-
 
 #Function to read button value
 def runButton():
@@ -151,29 +146,6 @@ def runButton():
             elif param.button_val == b'\x00':
                 is_pressed[0] = False
         time.sleep(0.06)
-
-
-#Function to replace the button with keyboard and mouse
-# def runButton():
-#     def on_release(key):
-#         if key == Key.esc:
-#             print("exit run Button")
-#             m_listener.stop()
-#             return False   
-
-#     def on_click(x, y, button, pressed):
-#         if pressed:
-#             is_pressed[0] = True
-#             print("Button Pressed!!")
-#         else:
-#             is_pressed[0] = False
-#             print("Button Released")
-
-#     with KeyboardListener(on_release=on_release) as k_listener, \
-#         MouseListener(on_click=on_click) as m_listener:
-#             k_listener.join()
-#             m_listener.join()
-
 
 #Function to run ZMQ Cleint to communicate with second device
 def runZmqClient():
@@ -311,21 +283,6 @@ if __name__ == "__main__":
     
     # Queue object to append all values to log 
     data_list_q     = mp.Queue()
-
-    # Deleting old SharedArrays
-    # if len(sa.list()) != 0:
-    #     sa.delete("shm://test")
-    #     sa.delete("shm://wr")
-    #     sa.delete("shm://button")
-    #     sa.delete("shm://flex")
-    #     sa.delete("shm://dist")
-    #     sa.delete("shm://start")
-    #     sa.delete("shm://end")
-    #     sa.delete("shm://trialCount")
-    #     sa.delete("shm://position")
-    #     sa.delete("shm://err_pos")
-    #     sa.delete("shm://err_seq")
-
 
     # Creating SharedArrays
     inp_msg             = sa.create("shm://test",1)
